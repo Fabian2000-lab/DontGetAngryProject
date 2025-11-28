@@ -1,4 +1,4 @@
-package zgkprojekt.dontgetangry;
+package zgkprojekt.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
