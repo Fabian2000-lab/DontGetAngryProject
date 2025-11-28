@@ -13,4 +13,6 @@ module zgkprojekt.dontgetangry {
 
     opens zgkprojekt.dontgetangry to javafx.fxml;
     exports zgkprojekt.dontgetangry;
+    exports zgkprojekt.controller;
+    opens zgkprojekt.controller to javafx.fxml;
 }
