@@ -1,9 +1,12 @@
 package zgkprojekt.model;
 
+import zgkprojekt.enums.EffectType;
+
 public class PlayerFigure {
     // combination of playerId + a number from 1 - 4 (for the 4 different figure a player can have)
     private String id;
-    private int playerId;
     private String icon;
     private String position;
+    private boolean hasEffect;
+    private EffectType currentEffect;       // the effect of the figure for the current round
 }
