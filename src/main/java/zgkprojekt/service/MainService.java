@@ -21,6 +21,11 @@ public class MainService {
         return _instance;
     }
 
+    public int getPlayerCount()
+    {
+        return _playingField.getPlayers().size();
+    }
+
     public void mapEvent() {
     }
 

@@ -12,4 +12,9 @@ public class PlayingField {
     private ArrayList<Player> players;
     private Player activePlayer;
 
+
+    public ArrayList<Player> getPlayers()
+    {
+        return this.players;
+    }
 }
