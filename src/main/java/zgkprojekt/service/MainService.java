@@ -204,7 +204,7 @@ public class MainService {
             PLAYER1.setStrokeWidth(3.0);
 
             PLAYER2 = new Polygon();
-            PLAYER2.setFill(Color.CORAL);
+            PLAYER2.setFill(Color.rgb(255,255,102));
             PLAYER2.getPoints().addAll(100.0, 50.0, 135.35, 64.64, 150.0, 100.0, 135.35, 135.35, 100.0, 150.0, 64.64, 135.35, 50.0, 100.0, 64.64, 64.64);
             PLAYER2.setScaleX(0.4);
             PLAYER2.setScaleY(0.4);
@@ -222,7 +222,7 @@ public class MainService {
             PLAYER3.setStrokeWidth(3.0);
 
             PLAYER4 = new Polygon();
-            PLAYER4.setFill(Color.CORAL);
+            PLAYER4.setFill(Color.rgb(255,110,180));
             PLAYER4.getPoints().addAll(100.0, 50.0, 135.35, 64.64, 150.0, 100.0, 135.35, 135.35, 100.0, 150.0, 64.64, 135.35, 50.0, 100.0, 64.64, 64.64);
             PLAYER4.setScaleX(0.4);
             PLAYER4.setScaleY(0.4);

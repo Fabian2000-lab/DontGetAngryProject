@@ -131,9 +131,5 @@
        <Circle fx:id="39" fill="9370db" radius="27.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="9" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
       <Button fx:id="moveButton" mnemonicParsing="false" onAction="#handleMoveButtonClick" prefHeight="25.0" prefWidth="103.0" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Label fx:id="moveLabel" prefHeight="115.0" prefWidth="101.0" text="Label" GridPane.rowIndex="1" />
-      <Polygon fill="CORAL" points="100.0, 50.0, 135.35, 64.64, 150.0, 100.0, 135.35, 135.35, 100.0, 150.0, 64.64, 135.35, 50.0, 100.0, 64.64, 64.64" scaleX="0.4" scaleY="0.4" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" GridPane.halignment="CENTER" GridPane.rowIndex="10" GridPane.valignment="CENTER" />
-      <Polygon fill="#ff6eb4" points="100.0, 50.0, 135.35, 64.64, 150.0, 100.0, 135.35, 135.35, 100.0, 150.0, 64.64, 135.35, 50.0, 100.0, 64.64, 64.64" scaleX="0.4" scaleY="0.4" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-      <Polygon fill="LIGHTBLUE" points="100.0, 50.0, 135.35, 64.64, 150.0, 100.0, 135.35, 135.35, 100.0, 150.0, 64.64, 135.35, 50.0, 100.0, 64.64, 64.64" scaleX="0.4" scaleY="0.4" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" GridPane.columnIndex="18" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-      <Polygon fill="#ffff66" points="100.0, 50.0, 135.35, 64.64, 150.0, 100.0, 135.35, 135.35, 100.0, 150.0, 64.64, 135.35, 50.0, 100.0, 64.64, 64.64" scaleX="0.4" scaleY="0.4" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" GridPane.columnIndex="18" GridPane.halignment="CENTER" GridPane.rowIndex="10" GridPane.valignment="CENTER" />
    </children>
 </GridPane>
