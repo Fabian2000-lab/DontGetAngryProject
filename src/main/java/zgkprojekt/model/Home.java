@@ -3,9 +3,9 @@ package zgkprojekt.model;
 import java.util.ArrayList;
 
 public class Home {
-    private ArrayList<Field> fields;
+    private ArrayList<Field> homeFields;
 
-    public Home() {
-        this.fields = new ArrayList<Field>();
+    public Home(ArrayList<Field> homeFields) {
+        this.homeFields = homeFields;
     }
 }
