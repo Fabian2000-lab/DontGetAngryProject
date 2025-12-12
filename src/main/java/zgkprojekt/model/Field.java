@@ -46,5 +46,13 @@ public class Field {
         return this.fieldType;
     }
 
+    public Circle getCircle() {
+        return this.circle;
+    }
+
+    public void setCircle(Circle circle) {
+        this.circle = circle;
+    }
+
 
 }
