@@ -54,4 +54,14 @@ public class Player {
     public EffectType getEffect() {
         return this.effect;
     }
+
+    public Home getHome() {
+        return this.home;
+    }
+
+    public Endzone getEnzone() {
+        return this.endzone;
+    }
+
+
 }

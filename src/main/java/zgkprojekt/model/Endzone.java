@@ -16,4 +16,12 @@ public class Endzone {
         return endzones;
     }
 
+    public void setIsFull(Boolean isFull) {
+        this.isFull = isFull;
+    }
+
+    public Boolean getIsFull() {
+        return isFull;
+    }
+
 }
