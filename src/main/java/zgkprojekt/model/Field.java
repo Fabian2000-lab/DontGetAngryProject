@@ -10,4 +10,14 @@ public class Field {
     private ArrayList<Player> players;
     private EffectType effect;
     private FieldType fieldType;
+    private String extra1;
+    private String extra2;
+    private String extra3;
+
+    public Field(int id, FieldType fieldType) {
+        this.id = id;
+        this.fieldType = fieldType;
+        this.players = null;
+        this.effect = null;
+    }
 }
