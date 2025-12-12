@@ -19,4 +19,9 @@ public class PlayingField {
 
     
 
+
+    public ArrayList<Player> getPlayers()
+    {
+        return this.players == null ? new ArrayList<Player>() : this.players;
+    }
 }

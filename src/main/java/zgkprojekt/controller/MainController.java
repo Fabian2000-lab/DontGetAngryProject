@@ -9,17 +9,28 @@ public class MainController {
     public static void startGameLoop()
     {
         _service = MainService.getInstance();
+        int playerCount = _service.getPlayerCount();
         boolean winner = false;
 
         while(!winner){
 
             _service.mapEvent();
-            _service.useItemOptional();
-            _service.useDice();
-            _service.makeFigureMove();
-            _service.triggerEventFieldCheck();
-            winner = _service.checkForWinner();
 
+            for(int i = 0; i < playerCount; i++){
+
+                _service.useItemOptional();
+                _service.useDice();
+                _service.makeFigureMove();
+                _service.triggerEventFieldCheck();
+
+                if(_service.checkForWinner())
+                {
+                    winner = true;
+                    break;
+                }
+
+            }
+            winner = true;
         }
 
         _service.saveDataToDataBase();
