@@ -3,8 +3,11 @@ package zgkprojekt.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import zgkprojekt.service.MainService;
 
-public class ButtonEventHandlerController {
+public class GameFieldController {
+
+    private static MainService _service;
     @FXML
     private Button moveButton;
 
@@ -12,7 +15,8 @@ public class ButtonEventHandlerController {
     private Label moveLabel;
 
     @FXML
-    public void handleMoveButtonClick() {
-        moveLabel.setText("Move button clicked");
+    public void handleMoveButtonClick()
+    {
+        MainController.startGameLoop();
     }
 }
