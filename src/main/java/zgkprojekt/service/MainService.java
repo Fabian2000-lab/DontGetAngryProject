@@ -91,8 +91,6 @@ public class MainService {
 
                 int id = Integer.parseInt(valueOfCircle);
 
-                System.out.println(id);
-
                 //Trackfields, id 0-39
                 if(id >= 0 && id <= 39)
                 {

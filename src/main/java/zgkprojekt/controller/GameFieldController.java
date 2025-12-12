@@ -26,7 +26,8 @@ public class GameFieldController {
     @FXML
     public void handleMoveButtonClick()
     {
-        _service.fillPlayingBoard(mainPane);
+        _service = MainService.getInstance();
 
+        _service.fillPlayingBoard(mainPane);
     }
 }
