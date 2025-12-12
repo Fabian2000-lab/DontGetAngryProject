@@ -27,18 +27,23 @@ public class MainService {
     }
 
     public void mapEvent() {
+        return;
     }
 
     public void useItemOptional() {
+        return;
     }
 
     public void useDice() {
+        return;
     }
 
     public void makeFigureMove() {
+        return;
     }
 
     public void triggerEventFieldCheck() {
+        return;
     }
 
     public boolean checkForWinner() {
@@ -46,5 +51,6 @@ public class MainService {
     }
 
     public void saveDataToDataBase() {
+        return;
     }
 }

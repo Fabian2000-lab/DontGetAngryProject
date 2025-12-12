@@ -28,7 +28,9 @@ public class MainController {
                     winner = true;
                     break;
                 }
+
             }
+            winner = true;
         }
 
         _service.saveDataToDataBase();
