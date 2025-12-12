@@ -3,7 +3,7 @@ package zgkprojekt.model;
 import zgkprojekt.enums.EffectType;
 
 public class Player {
-    private int id;
+    private String id;
     private String name;
     private Inventory inventory;
     private PlayerFigure[] playerFigures;
@@ -15,14 +15,14 @@ public class Player {
     private String extra2;
     private String extra3;
 
-    public Player (int id, String name) {
+    public Player (String id, String name, Endzone endzones, Home home) {
         this.id = id; 
         this.name = name;
         this.inventory = new Inventory();
         this.playerFigures = initializePlayerFigureIds();
         this.activeEffect = false;
-        this.home = new Home();
-        this.endzone = new Endzone();
+        this.home = home;
+        this.endzone = endzones;
     }
 
     private PlayerFigure[] initializePlayerFigureIds() {
