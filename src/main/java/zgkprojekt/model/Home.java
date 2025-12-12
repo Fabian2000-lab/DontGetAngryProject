@@ -8,4 +8,8 @@ public class Home {
     public Home(ArrayList<Field> homeFields) {
         this.homeFields = homeFields;
     }
+
+    public ArrayList<Field> getHomeFields() {
+        return homeFields;
+    }
 }

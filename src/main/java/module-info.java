@@ -10,6 +10,7 @@ module zgkprojekt.dontgetangry {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires javafx.graphics;
 
     opens zgkprojekt.dontgetangry to javafx.fxml;
     exports zgkprojekt.dontgetangry;

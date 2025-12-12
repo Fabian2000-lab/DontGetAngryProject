@@ -11,5 +11,9 @@ public class Endzone {
         this.isFull = false;
     }
 
+    public ArrayList<Field> getEndzones()
+    {
+        return endzones;
+    }
 
 }
