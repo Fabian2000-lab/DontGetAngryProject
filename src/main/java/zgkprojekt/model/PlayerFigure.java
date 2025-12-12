@@ -1,5 +1,6 @@
 package zgkprojekt.model;
 
+import javafx.scene.shape.Polygon;
 import zgkprojekt.enums.EffectType;
 
 public class PlayerFigure {
@@ -8,6 +9,7 @@ public class PlayerFigure {
     private String icon;
     private String position;
     private boolean hasEffect;
+    private Polygon polygon;
     
     // the effect of the figure for the current round
     private EffectType currentEffect;       
@@ -46,5 +48,13 @@ public class PlayerFigure {
 
     public void setCurrentEffect(EffectType effectType) {
         this.currentEffect = effectType;
+    }
+
+    public Polygon getPolygon() {
+        return this.polygon;
+    }
+
+    public void setPolygon(Polygon polygon) {
+        this.polygon = polygon;
     }
 }
