@@ -8,7 +8,9 @@ public class PlayerFigure {
     private String icon;
     private String position;
     private boolean hasEffect;
-    private EffectType currentEffect;       // the effect of the figure for the current round
+    
+    // the effect of the figure for the current round
+    private EffectType currentEffect;       
 
     public PlayerFigure(String id) {
         this.id = id;
@@ -16,5 +18,33 @@ public class PlayerFigure {
         this.position = null;
         this.hasEffect = false;
         this.currentEffect = null;
+    }
+
+    public String getId () {
+        return this.id;
+    }
+
+    public String getPosition() {
+        return this.position;
+    }
+
+    public void setPosition(String postion) {
+        this.position = postion;
+    }
+
+    public Boolean getHasEffect() {
+        return this.hasEffect;
+    }
+
+    public void setHasEffect(Boolean hasEffect) {
+        this.hasEffect = hasEffect;
+    }
+
+    public EffectType getCurrentEffect() {
+        return this.currentEffect;
+    }
+
+    public void setCurrentEffect(EffectType effectType) {
+        this.currentEffect = effectType;
     }
 }
