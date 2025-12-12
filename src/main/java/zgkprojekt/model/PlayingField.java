@@ -17,11 +17,10 @@ public class PlayingField {
         this.players = players;
     }
 
-    
-
-
     public ArrayList<Player> getPlayers()
     {
         return this.players == null ? new ArrayList<Player>() : this.players;
     }
+
+
 }
