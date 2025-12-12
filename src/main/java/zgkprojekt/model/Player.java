@@ -34,4 +34,24 @@ public class Player {
 
         return figures;
     }
+
+    public PlayerFigure[] getPlayerFigures() {
+        return this.playerFigures;
+    }
+
+    public Inventory getInventory() {
+        return this.inventory;
+    }
+
+    public boolean getHasActiveEffect() {
+        return this.activeEffect;
+    }
+
+    public void setHasActiveEffect(Boolean activeEffect) {
+        this.activeEffect = activeEffect;
+    }
+
+    public EffectType getEffect() {
+        return this.effect;
+    }
 }
