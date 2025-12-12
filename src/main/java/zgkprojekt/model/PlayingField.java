@@ -6,10 +6,17 @@ import zgkprojekt.enums.EventType;
 
 public class PlayingField {
     private ArrayList<Field> track;
+    private ArrayList<Player> players; // 1, 2, 3, 4
     private ArrayList<Endzone> endzones;
     private ArrayList<Home> homes;
     private Event currentMapEvent;
-    private ArrayList<Player> players;
     private Player activePlayer;
+
+    public PlayingField(ArrayList<Field> track, ArrayList<Player> players) {
+        this.track = track;
+        this.players = players;
+    }
+
+    
 
 }

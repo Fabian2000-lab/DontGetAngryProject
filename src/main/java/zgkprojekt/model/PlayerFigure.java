@@ -9,4 +9,12 @@ public class PlayerFigure {
     private String position;
     private boolean hasEffect;
     private EffectType currentEffect;       // the effect of the figure for the current round
+
+    public PlayerFigure(String id) {
+        this.id = id;
+        this.icon = null;
+        this.position = null;
+        this.hasEffect = false;
+        this.currentEffect = null;
+    }
 }
