@@ -6,6 +6,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
 import zgkprojekt.enums.FieldType;
 import zgkprojekt.model.*;
@@ -183,7 +184,19 @@ public class MainService {
                 playerFigures[j].setPolygon(tmp);
                 mainPane.add(tmp, colIndex, rowIndex);
             }
+
+
         }
+
+    }
+    private void moveTo(Polygon source, Circle dest)
+    {
+        // Get circle center in parent coordinates
+        Integer colIndex = GridPane.getColumnIndex(dest);
+        Integer rowIndex = GridPane.getRowIndex(dest);
+
+        GridPane.setColumnIndex(source, colIndex);
+        GridPane.setRowIndex(source, rowIndex);
     }
 
     public static class FigureDefinitions{
