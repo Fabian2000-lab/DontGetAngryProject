@@ -9,6 +9,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
 import zgkprojekt.enums.FieldType;
 import zgkprojekt.model.*;
+import javafx.scene.Scene;
 
 import java.util.ArrayList;
 
@@ -17,10 +18,12 @@ public class MainService {
     private static MainService _instance;
 
     private PlayingField _playingField;
+    private Scene _scene;
 
     private MainService()
     {
         _playingField = null;
+        _scene = null;
     }
 
     public static MainService getInstance()
@@ -29,6 +32,14 @@ public class MainService {
             _instance = new MainService();
 
         return _instance;
+    }
+
+    public Scene getScene(){
+        return _scene;
+    }
+
+    public void setScene(Scene scene){
+        _scene = scene;
     }
 
     public int getPlayerCount()
