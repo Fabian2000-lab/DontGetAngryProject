@@ -23,6 +23,9 @@ public class AddPlayersController {
 
         _service = MainService.getInstance();
 
+        if(!_service.finalizePlayerNames(mainPane, currentPlayers))
+            return;
+
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/zgkprojekt/view/board.fxml")
         );

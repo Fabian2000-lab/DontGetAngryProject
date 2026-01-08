@@ -11,6 +11,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import zgkprojekt.enums.FieldType;
 import zgkprojekt.model.*;
 import javafx.scene.Scene;
@@ -23,6 +24,7 @@ public class MainService {
 
     private PlayingField _playingField;
     private Scene _scene;
+    private String[] playerNames;
 
     private MainService()
     {
@@ -97,16 +99,12 @@ public class MainService {
             allHomes.add(aHome);
         }
 
-        Player player1 = new Player("1", "Fabian", allEndzones.get(0), allHomes.get(0));
-        Player player2 = new Player("2", "Fabian2", allEndzones.get(1), allHomes.get(1));
-        Player player3 = new Player("3", "Fabian3", allEndzones.get(2), allHomes.get(2));
-        Player player4 = new Player("4", "Fabian4", allEndzones.get(3), allHomes.get(3));
+        for(int i = 0; i < playerNames.length; i++)
+        {
+            Player player = new Player(Integer.toString(i+1), playerNames[i], allEndzones.get(i), allHomes.get(i));
 
-        players.add(player1);
-        players.add(player2);
-        players.add(player3);
-        players.add(player4);
-
+            players.add(player);
+        }
 
         for(var a : mainPane.getChildren()){
             if(a instanceof Circle b){
@@ -256,6 +254,26 @@ public class MainService {
         }
 
         mainPane.getChildren().remove(indexToRemove);
+    }
+
+    public boolean finalizePlayerNames(Pane mainPane, int playerCount) {
+
+        String[] playerNamestmp = new String[playerCount];
+        int idx = 0;
+
+        for(var a : mainPane.getChildren()){
+            if(a instanceof TextField b){
+                if(b.getText().isEmpty())
+                    return false;
+
+                playerNamestmp[idx] = b.getText();
+                idx++;
+            }
+        }
+
+        playerNames = playerNamestmp;
+
+        return true;
     }
 
     public static class FigureDefinitions{
