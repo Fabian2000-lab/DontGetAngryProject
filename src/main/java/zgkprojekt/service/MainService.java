@@ -2,12 +2,15 @@ package zgkprojekt.service;
 
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Font;
 import zgkprojekt.enums.FieldType;
 import zgkprojekt.model.*;
 import javafx.scene.Scene;
@@ -195,10 +198,7 @@ public class MainService {
                 playerFigures[j].setPolygon(tmp);
                 mainPane.add(tmp, colIndex, rowIndex);
             }
-
-
         }
-
     }
     private void moveTo(Polygon source, Circle dest)
     {
@@ -208,6 +208,54 @@ public class MainService {
 
         GridPane.setColumnIndex(source, colIndex);
         GridPane.setRowIndex(source, rowIndex);
+    }
+
+    public void playerRegistrationAddPlayer(Pane mainPane, int player) {
+
+        TextField newPlayerTextField  = new TextField();
+        Font font = new Font("Constantia", 20);
+        TextField textFieldInfo = new TextField();
+
+
+        //move Buttons a little down
+        for(var a : mainPane.getChildren()){
+            if(a instanceof Button b){
+                b.setLayoutY( b.getLayoutY() + 110 );
+            }
+            if(a instanceof TextField b){
+                textFieldInfo = b;
+            }
+        }
+
+        newPlayerTextField.setFont(textFieldInfo.getFont());
+        newPlayerTextField.setLayoutX(textFieldInfo.getLayoutX());
+        newPlayerTextField.setLayoutY(textFieldInfo.getLayoutY() + 110);
+        newPlayerTextField.setPrefHeight(textFieldInfo.getPrefHeight());
+        newPlayerTextField.setPrefWidth(textFieldInfo.getPrefWidth());
+        newPlayerTextField.setPromptText(String.format("Enter player %d name", player));
+
+
+        mainPane.getChildren().add(newPlayerTextField);
+
+    }
+
+    public void playerRegistrationRemovePlayer(Pane mainPane) {
+
+        int index = 0;
+        int indexToRemove = 0;
+
+        //move Buttons a little down
+        for(var a : mainPane.getChildren()){
+            if(a instanceof Button b){
+                b.setLayoutY( b.getLayoutY() - 110 );
+            }
+            if(a instanceof TextField b){
+                indexToRemove = index;
+            }
+            index++;
+        }
+
+        mainPane.getChildren().remove(indexToRemove);
     }
 
     public static class FigureDefinitions{
