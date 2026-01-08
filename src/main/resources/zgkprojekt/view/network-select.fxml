@@ -4,15 +4,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane fx:controller="zgkprojekt.controller.NetworkSelectController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zgkprojekt.controller.NetworkSelectController">
    <children>
-      <Button layoutX="460.0" layoutY="502.5" mnemonicParsing="false" prefHeight="75.0" prefWidth="400.0" text="Local Game" onAction="#handleStartLocalGame">
+      <Button layoutX="150.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleStartLocalGame" prefHeight="75.0" prefWidth="400.0" text="Local Game">
          <font>
             <Font name="Constantia" size="38.0" />
          </font>
       </Button>
-      <Button layoutX="1060.0" layoutY="502.5" mnemonicParsing="false" prefHeight="75.0" prefWidth="400.0" text="Network Game">
+      <Button layoutX="750.0" layoutY="300.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="400.0" text="Network Game">
          <font>
             <Font name="Constantia" size="38.0" />
          </font>

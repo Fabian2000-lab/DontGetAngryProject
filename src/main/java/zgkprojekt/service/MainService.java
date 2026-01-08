@@ -220,7 +220,7 @@ public class MainService {
         //move Buttons a little down
         for(var a : mainPane.getChildren()){
             if(a instanceof Button b){
-                b.setLayoutY( b.getLayoutY() + 110 );
+                b.setLayoutY( b.getLayoutY() + 75 );
             }
             if(a instanceof TextField b){
                 textFieldInfo = b;
@@ -229,7 +229,7 @@ public class MainService {
 
         newPlayerTextField.setFont(textFieldInfo.getFont());
         newPlayerTextField.setLayoutX(textFieldInfo.getLayoutX());
-        newPlayerTextField.setLayoutY(textFieldInfo.getLayoutY() + 110);
+        newPlayerTextField.setLayoutY(textFieldInfo.getLayoutY() + 75);
         newPlayerTextField.setPrefHeight(textFieldInfo.getPrefHeight());
         newPlayerTextField.setPrefWidth(textFieldInfo.getPrefWidth());
         newPlayerTextField.setPromptText(String.format("Enter player %d name", player));
@@ -247,7 +247,7 @@ public class MainService {
         //move Buttons a little down
         for(var a : mainPane.getChildren()){
             if(a instanceof Button b){
-                b.setLayoutY( b.getLayoutY() - 110 );
+                b.setLayoutY( b.getLayoutY() - 75 );
             }
             if(a instanceof TextField b){
                 indexToRemove = index;
