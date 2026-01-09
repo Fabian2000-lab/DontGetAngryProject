@@ -6,6 +6,7 @@ import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -19,6 +20,7 @@ import zgkprojekt.model.*;
 import javafx.scene.Scene;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class MainService {
 
@@ -148,7 +150,12 @@ public class MainService {
                 }
 
             }
+
+
+
         }
+
+        fields.sort(Comparator.comparingInt(Field::getId));
 
         int playerCount = getPlayerCount();
 
@@ -170,6 +177,8 @@ public class MainService {
             for(int j = 0; j < 4; j++)
             {
                 Polygon tmp = new Polygon();
+
+                tmp.setOnMouseClicked(this::handlePolygonClick);
 
                 tmp.setFill(definition.getFill());
                 tmp.setScaleX(definition.getScaleX());
@@ -208,6 +217,17 @@ public class MainService {
             }
         }
     }
+
+    private void handlePolygonClick(MouseEvent mouseEvent) {
+        Polygon polygon = (Polygon) mouseEvent.getSource();
+
+        //PlayerFigure player = findFigureViaPolygon(polygon);
+        //Field field = player.getPosition();
+
+        //_playingField.getTrack().get(Dice.getCurrentDiceRoll()).getCircle()
+        moveTo(polygon, _playingField.getTrack().get(Dice.getCurrentDiceRoll()).getCircle());
+    }
+
     private void moveTo(Polygon source, Circle dest)
     {
         // Get circle center in parent coordinates
