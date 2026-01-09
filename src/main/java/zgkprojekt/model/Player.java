@@ -35,6 +35,10 @@ public class Player {
         return figures;
     }
 
+    public String getName(){
+        return name;
+    }
+
     public PlayerFigure[] getPlayerFigures() {
         return this.playerFigures;
     }

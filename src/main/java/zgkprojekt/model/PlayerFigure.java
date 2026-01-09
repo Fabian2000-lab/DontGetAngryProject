@@ -10,6 +10,7 @@ public class PlayerFigure {
     private Field position;
     private boolean hasEffect;
     private Polygon polygon;
+    private Player owner;
     
     // the effect of the figure for the current round
     private EffectType currentEffect;       
@@ -20,7 +21,12 @@ public class PlayerFigure {
         this.position = null;
         this.hasEffect = false;
         this.currentEffect = null;
+        this.owner = null;
     }
+
+    public void setOwner(Player owner) { this.owner = owner; }
+
+    public Player getOwner() { return this.owner; }
 
     public String getId () {
         return this.id;

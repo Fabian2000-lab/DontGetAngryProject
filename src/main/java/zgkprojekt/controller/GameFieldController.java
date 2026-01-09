@@ -28,12 +28,14 @@ public class GameFieldController {
         _service = MainService.getInstance();
 
         _service.fillPlayingBoard(mainPane);
+
+
+        //_service.startGameLoop();
     }
 
     @FXML
     public void handleMoveButtonClick()
     {
-        _service.useDice();
-        System.out.println("Rolled a " + Dice.getCurrentDiceRoll());
+        _service.diceButton();
     }
 }
