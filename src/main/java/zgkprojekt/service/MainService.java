@@ -245,7 +245,7 @@ public class MainService {
             invalidMove = false;
         } else if (currentFieldId < 40) {
 
-            newPosition = _playingField.getTrack().get((currentFieldId + Dice.getCurrentDiceRoll()) % 39);
+            newPosition = _playingField.getTrack().get((currentFieldId + Dice.getCurrentDiceRoll()) % 40);
 
             invalidMove = false;
         }
