@@ -34,6 +34,10 @@ public class PlayingField {
         return this.homes;
     }
 
+    public void setHomes(ArrayList<Home> homes) {
+        this.homes = homes;
+    }
+
     public void setCurrentMapEvent(EventType eventType) {
         this.currentMapEvent = new Event(eventType, this.players.size());
     }
@@ -51,4 +55,7 @@ public class PlayingField {
     }
 
 
+    public void setEndzones(ArrayList<Endzone> endzones) {
+        this.endzones = endzones;
+    }
 }
