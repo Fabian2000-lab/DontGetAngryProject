@@ -1,6 +1,5 @@
 package zgkprojekt.service;
 
-import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
@@ -14,7 +13,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import zgkprojekt.enums.FieldType;
 import zgkprojekt.model.*;
 import javafx.scene.Scene;
@@ -150,11 +148,21 @@ public class MainService {
                 }
 
             }
-
-
-
         }
 
+        for(int i = 0; i < _playingField.getPlayers().size(); i++){
+
+            PlayerFigure[] figures = _playingField.getPlayers().get(i).getPlayerFigures();
+            ArrayList<Field> homes = allHomes.get(i).getHomeFields();
+            for(int j = 0; j < 4; j++){
+
+                figures[j].setPosition(homes.get(j));
+                homes.get(j).setPlayer(figures[j]);
+
+            }
+        }
+        _playingField.setHomes(allHomes);
+        _playingField.setEndzones(allEndzones);
         fields.sort(Comparator.comparingInt(Field::getId));
 
         int playerCount = getPlayerCount();
@@ -221,21 +229,86 @@ public class MainService {
     private void handlePolygonClick(MouseEvent mouseEvent) {
         Polygon polygon = (Polygon) mouseEvent.getSource();
 
-        //PlayerFigure player = findFigureViaPolygon(polygon);
-        //Field field = player.getPosition();
+        PlayerFigure player = findFigureViaPolygon(polygon);
+        Field field = player.getPosition();
+        Field newPosition = null;
+
+        boolean invalidMove = true;
+
+        int currentFieldId = field.getId();
+
+
+        if(Dice.getCurrentDiceRoll() == 6 && (currentFieldId >= 110 && currentFieldId <= 113) || (currentFieldId >= 120 && currentFieldId <= 123) || (currentFieldId >= 130 && currentFieldId <= 133) || (currentFieldId >= 140 && currentFieldId <= 143))
+        {
+            newPosition = _playingField.getTrack().get(0);
+
+            invalidMove = false;
+        } else if (currentFieldId < 40) {
+
+            newPosition = _playingField.getTrack().get((currentFieldId + Dice.getCurrentDiceRoll()) % 39);
+
+            invalidMove = false;
+        }
+
+        if(!invalidMove)
+            moveTo(player, newPosition);
+
 
         //_playingField.getTrack().get(Dice.getCurrentDiceRoll()).getCircle()
-        moveTo(polygon, _playingField.getTrack().get(Dice.getCurrentDiceRoll()).getCircle());
+
     }
 
-    private void moveTo(Polygon source, Circle dest)
+    private PlayerFigure findFigureViaPolygon(Polygon polygon) {
+
+        PlayerFigure player = null;
+
+        var track = _playingField.getTrack();
+        var homes = _playingField.getHomes();
+        var endzones = _playingField.getEndzones();
+
+        for(var trackField : track)
+        {
+            if(trackField.getPlayer() != null && trackField.getPlayer().getPolygon() == polygon)
+            {
+                player = trackField.getPlayer();
+            }
+        }
+
+        for(var home : homes)
+        {
+            for(var homeField : home.getHomeFields()){
+
+                if(homeField.getPlayer() != null && homeField.getPlayer().getPolygon() == polygon)
+                {
+                    player = homeField.getPlayer();
+                }
+            }
+        }
+        for(var endzone : endzones)
+        {
+            for(var endzoneField : endzone.getEndzones()){
+
+                if(endzoneField.getPlayer() != null && endzoneField.getPlayer().getPolygon() == polygon)
+                {
+                    player = endzoneField.getPlayer();
+                }
+            }
+        }
+
+        return player;
+    }
+
+    private void moveTo(PlayerFigure source, Field dest)
     {
         // Get circle center in parent coordinates
-        Integer colIndex = GridPane.getColumnIndex(dest);
-        Integer rowIndex = GridPane.getRowIndex(dest);
+        Integer colIndex = GridPane.getColumnIndex(dest.getCircle());
+        Integer rowIndex = GridPane.getRowIndex(dest.getCircle());
 
-        GridPane.setColumnIndex(source, colIndex);
-        GridPane.setRowIndex(source, rowIndex);
+        GridPane.setColumnIndex(source.getPolygon(), colIndex);
+        GridPane.setRowIndex(source.getPolygon(), rowIndex);
+
+        source.setPosition(dest);
+        dest.setPlayer(source);
     }
 
     public void playerRegistrationAddPlayer(Pane mainPane, int player) {

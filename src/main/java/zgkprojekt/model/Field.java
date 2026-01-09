@@ -1,16 +1,12 @@
 package zgkprojekt.model;
 
-import java.util.ArrayList;
-
-import com.almasb.fxgl.dsl.components.Effect;
-
 import javafx.scene.shape.Circle;
 import zgkprojekt.enums.EffectType;
 import zgkprojekt.enums.FieldType;
 
 public class Field {
     private int id;
-    private ArrayList<Player> players;
+    private PlayerFigure player;
     private EffectType effect;
     private FieldType fieldType;
     private Circle circle;
@@ -22,7 +18,7 @@ public class Field {
         this.id = id;
         this.fieldType = fieldType;
         this.circle = circle;
-        this.players = null;
+        this.player = null;
         this.effect = null;
     }
 
@@ -30,8 +26,12 @@ public class Field {
         return this.id;
     }
 
-    public void setPlayersList(Player player) {
-        this.players.add(player);
+    public void setPlayer(PlayerFigure player) {
+        this.player = player;
+    }
+
+    public  PlayerFigure getPlayer() {
+        return this.player;
     }
 
     public void setEffectType(EffectType type) {
