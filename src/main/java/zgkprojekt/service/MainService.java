@@ -238,7 +238,7 @@ public class MainService {
         int currentFieldId = field.getId();
 
 
-        if(Dice.getCurrentDiceRoll() == 6 && (currentFieldId >= 110 && currentFieldId <= 113) || (currentFieldId >= 120 && currentFieldId <= 123) || (currentFieldId >= 130 && currentFieldId <= 133) || (currentFieldId >= 140 && currentFieldId <= 143))
+        if(Dice.getCurrentDiceRoll() == 6 && ((currentFieldId >= 110 && currentFieldId <= 113) || (currentFieldId >= 120 && currentFieldId <= 123) || (currentFieldId >= 130 && currentFieldId <= 133) || (currentFieldId >= 140 && currentFieldId <= 143)))
         {
             newPosition = _playingField.getTrack().get(0);
 
