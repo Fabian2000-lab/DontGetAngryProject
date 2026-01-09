@@ -7,7 +7,7 @@ public class PlayerFigure {
     // combination of playerId + a number from 1 - 4 (for the 4 different figure a player can have)
     private String id;
     private String icon;
-    private String position;
+    private Field position;
     private boolean hasEffect;
     private Polygon polygon;
     
@@ -26,11 +26,11 @@ public class PlayerFigure {
         return this.id;
     }
 
-    public String getPosition() {
+    public Field getPosition() {
         return this.position;
     }
 
-    public void setPosition(String postion) {
+    public void setPosition(Field postion) {
         this.position = postion;
     }
 
