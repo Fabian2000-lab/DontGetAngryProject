@@ -17,8 +17,8 @@ import zgkprojekt.enums.FieldType;
 import zgkprojekt.model.*;
 import javafx.scene.Scene;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MainService {
 
@@ -27,6 +27,7 @@ public class MainService {
     private PlayingField _playingField;
     private Scene _scene;
     private String[] playerNames;
+    private HashMap<Player, Integer> orderMap = new HashMap<>();
 
     private MainService()
     {
@@ -88,6 +89,7 @@ public class MainService {
         ArrayList<Field> fields = new ArrayList<Field>();
         ArrayList<Player> players = new ArrayList<Player>();
         _playingField = new PlayingField(fields, players);
+        _playingField.setActivePlayerQueue(new ArrayDeque<Player>());
 
         ArrayList<Endzone> allEndzones = new ArrayList<>();
         ArrayList<Home> allHomes = new ArrayList<>();
@@ -154,11 +156,11 @@ public class MainService {
 
             PlayerFigure[] figures = _playingField.getPlayers().get(i).getPlayerFigures();
             ArrayList<Field> homes = allHomes.get(i).getHomeFields();
+
             for(int j = 0; j < 4; j++){
 
                 figures[j].setPosition(homes.get(j));
                 homes.get(j).setPlayer(figures[j]);
-
             }
         }
         _playingField.setHomes(allHomes);
@@ -222,8 +224,13 @@ public class MainService {
 
                 playerFigures[j].setPolygon(tmp);
                 mainPane.add(tmp, colIndex, rowIndex);
+
+                playerFigures[j].setOwner(_playingField.getPlayers().get(i));
             }
         }
+
+        System.out.printf("%s würfeln um eine Reinfolge zu bestimmen.%n", _playingField.getPlayers().get(0).getName());
+
     }
 
     private void handlePolygonClick(MouseEvent mouseEvent) {
@@ -231,6 +238,10 @@ public class MainService {
 
         PlayerFigure player = findFigureViaPolygon(polygon);
         Field field = player.getPosition();
+
+        if(_playingField.getActivePlayer() != player.getOwner())
+            return;
+
         Field newPosition = null;
 
         boolean invalidMove = true;
@@ -251,11 +262,12 @@ public class MainService {
         }
 
         if(!invalidMove)
+        {
             moveTo(player, newPosition);
+            _playingField.nextPlayer();
 
-
-        //_playingField.getTrack().get(Dice.getCurrentDiceRoll()).getCircle()
-
+            System.out.printf("%s ist an der Reihe.%n", _playingField.getActivePlayer().getName());
+        }
     }
 
     private PlayerFigure findFigureViaPolygon(Polygon polygon) {
@@ -377,6 +389,58 @@ public class MainService {
         playerNames = playerNamestmp;
 
         return true;
+    }
+
+    public void decidePlayingOrder() {
+
+        _playingField.getPlayers();
+
+
+    }
+
+    public void diceButton() {
+
+        if(_playingField.getPlayers().size() == orderMap.size()){
+            Dice.roll();
+            System.out.printf("%s rolled a %d%n",_playingField.getActivePlayer().getName(), Dice.getCurrentDiceRoll());
+        }
+        //Game is still deciding the order of the players
+        else
+        {
+            do {
+                Dice.roll();
+            } while (orderMap.containsValue(Dice.getCurrentDiceRoll()));
+
+            System.out.printf("%s rolled a %d%n",_playingField.getPlayers().get(orderMap.size()).getName(), Dice.getCurrentDiceRoll());
+
+            if(_playingField.getPlayers().size() > orderMap.size() + 1)
+                System.out.printf("Als nächstes würfelt %s%n", _playingField.getPlayers().get(orderMap.size() + 1).getName());
+
+            orderMap.put(_playingField.getPlayers().get(orderMap.size()), Dice.getCurrentDiceRoll());
+
+            if(orderMap.size() == _playingField.getPlayers().size())
+            {
+                //Erstellt eine queue aus der Map, sortiert nach Integer Value in der Hashmap.
+                ArrayDeque<Player> queue =
+                        orderMap.entrySet()
+                                .stream()
+                                .sorted(Map.Entry.<Player, Integer>comparingByValue().reversed())
+                                .map(Map.Entry::getKey)
+                                .collect(Collectors.toCollection(ArrayDeque::new));
+
+                _playingField.setActivePlayerQueue(queue);
+
+                for(int i = 0; i < _playingField.getPlayers().size(); i++) {
+                    System.out.printf("Reinfolge: %d. %s%n", i+1, _playingField.getActivePlayer().getName());
+                    _playingField.nextPlayer();
+                }
+
+                System.out.printf("%n%s Beginnt!%n",_playingField.getActivePlayer().getName());
+
+            }
+        }
+
+
     }
 
     public static class FigureDefinitions{

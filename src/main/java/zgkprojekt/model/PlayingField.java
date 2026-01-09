@@ -1,6 +1,8 @@
 package zgkprojekt.model;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Queue;
 
 import zgkprojekt.enums.EventType;
 
@@ -10,7 +12,7 @@ public class PlayingField {
     private ArrayList<Endzone> endzones;
     private ArrayList<Home> homes;
     private Event currentMapEvent;
-    private Player activePlayer;
+    private ArrayDeque<Player> activePlayer;
 
     public PlayingField(ArrayList<Field> track, ArrayList<Player> players) {
         this.track = track;
@@ -46,12 +48,22 @@ public class PlayingField {
         return this.currentMapEvent;
     }
 
-    public void setActivePlayer(Player player) {
+    public void setActivePlayerQueue(ArrayDeque<Player> player) {
         this.activePlayer = player;
     }
 
-    public Player getActivePlayer() {
+    public ArrayDeque<Player> getActivePlayerQueue() {
         return this.activePlayer;
+    }
+
+    public Player getActivePlayer() {
+        return this.activePlayer.peek();
+    }
+
+    public void nextPlayer()
+    {
+        Player tmp = activePlayer.poll();
+        activePlayer.add(tmp);
     }
 
 
