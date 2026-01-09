@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Circle;
+import zgkprojekt.model.Dice;
 import zgkprojekt.service.MainService;
 
 import java.util.ArrayList;
@@ -23,11 +24,16 @@ public class GameFieldController {
     @FXML
     private Label moveLabel;
 
-    @FXML
-    public void handleMoveButtonClick()
-    {
+    public void setup() {
         _service = MainService.getInstance();
 
         _service.fillPlayingBoard(mainPane);
+    }
+
+    @FXML
+    public void handleMoveButtonClick()
+    {
+        _service.useDice();
+        System.out.println("Rolled a " + Dice.getCurrentDiceRoll());
     }
 }

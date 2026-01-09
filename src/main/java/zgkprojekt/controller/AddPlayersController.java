@@ -32,6 +32,9 @@ public class AddPlayersController {
 
         Parent newRoot = loader.load();
 
+        GameFieldController controller = loader.getController();
+        controller.setup();
+
         _service.getScene().setRoot(newRoot);
     }
 
