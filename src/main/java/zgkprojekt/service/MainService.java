@@ -1,9 +1,11 @@
 package zgkprojekt.service;
 
+import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -176,6 +178,14 @@ public class MainService {
                 tmp.setStroke(definition.getStroke());
                 tmp.setStrokeWidth(definition.getStrokeWidth());
                 tmp.getPoints().addAll(definition.getPoints());
+
+                //Hover effect
+                tmp.setOnMouseEntered(e -> {
+                    tmp.setEffect(new DropShadow(27,10,10,Color.web("#006666")));
+                });
+                tmp.setOnMouseExited(e -> {
+                    tmp.setEffect(null);
+                });
 
                 Circle circleInfo = playerHome.getHomeFields().get(j).getCircle();
 
