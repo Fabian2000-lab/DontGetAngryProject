@@ -64,7 +64,7 @@ public class MainService {
     }
 
     public void useDice() {
-        return;
+        Dice.roll();
     }
 
     public void makeFigureMove() {
