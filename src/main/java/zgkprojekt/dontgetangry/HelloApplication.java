@@ -21,7 +21,7 @@ public class HelloApplication extends Application {
         MainService _service = MainService.getInstance();
         _service.setScene(scene);
 
-        stage.setTitle("Hello!");
+        stage.setTitle("DontGetAngry™");
         stage.setScene(scene);
         stage.show();
     }
