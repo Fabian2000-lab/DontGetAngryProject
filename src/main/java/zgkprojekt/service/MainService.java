@@ -13,6 +13,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
+import kotlin.Pair;
 import zgkprojekt.enums.FieldType;
 import zgkprojekt.model.*;
 import javafx.scene.Scene;
@@ -246,8 +247,8 @@ public class MainService {
             return;
 
         Field newPosition = null;
-
         boolean validMove = false;
+        PlayerFigure collisionObject = null;
 
         int currentFieldId = field.getId();
 
@@ -256,13 +257,61 @@ public class MainService {
         {
             newPosition = _playingField.getActivePlayer().getStartField();
 
-            validMove = true;
-        } else if (currentFieldId < 40) {
+        }else if((currentFieldId >= 210 && currentFieldId <= 213) || (currentFieldId >= 220 && currentFieldId <= 223) || (currentFieldId >= 230 && currentFieldId <= 233) || (currentFieldId >= 240 && currentFieldId <= 243)){
 
-            newPosition = _playingField.getTrack().get((currentFieldId + Dice.getCurrentDiceRoll()) % 40);
+            var endzone = _playingField.getActivePlayer().getEnzone().getEndzones();
 
-            validMove = true;
+            for(int i = 0; i < endzone.size(); i++){
+                if(endzone.get(i).getPlayer() == player)
+                    {
+                    int newIndexPosition = Dice.getCurrentDiceRoll() + i;
+
+                    //if(newIndexPosition < 4)
+                        newPosition = endzone.get(i + 1);
+                break;
+                }
+            }
         }
+        else if (currentFieldId < 40) {
+
+            //Check if player goes into Endzone
+            boolean hasBeenInEndzoneCheck = false;
+            var endzone = _playingField.getActivePlayer().getEnzone().getEndzones();
+
+            for(int i = 1; i <= Dice.getCurrentDiceRoll(); i++){
+
+                if(_playingField.getActivePlayer().isEntranceToEndone(_playingField.getTrack().get((field.getId() + i ) % 40))){
+
+                    //Now check for OutOfBounds
+                    int postitionCheckInEndzone = Dice.getCurrentDiceRoll() - i;
+
+                    if(postitionCheckInEndzone < 4 )
+                        newPosition = endzone.get(postitionCheckInEndzone);
+
+                    hasBeenInEndzoneCheck = true;
+                }
+
+            }
+            if(!hasBeenInEndzoneCheck)
+                newPosition = _playingField.getTrack().get((currentFieldId + Dice.getCurrentDiceRoll()) % 40);
+        }
+
+        Pair<Boolean, PlayerFigure> pair = null;
+
+        if(newPosition == null)
+        {
+            System.out.println("OutOfBounds");
+            return;
+        }
+
+
+        pair = collisionCheck(newPosition);
+
+        if(pair.getFirst())
+            System.out.println("COLISSION!!");
+
+        if(!pair.getFirst() || (pair.getFirst() && _playingField.getActivePlayer() != pair.getSecond().getOwner()))
+            validMove = true;
 
         if(validMove)
         {
@@ -271,6 +320,17 @@ public class MainService {
 
             System.out.printf("%s ist an der Reihe.%n", _playingField.getActivePlayer().getName());
         }
+    }
+
+    private Pair<Boolean, PlayerFigure> collisionCheck(Field field) {
+        //return true if there is a collision and with which PlayerFigure
+
+        Pair<Boolean, PlayerFigure> newPair = new Pair<Boolean, PlayerFigure>(false, null);
+
+        if(field.getPlayer() != null)
+            newPair = new Pair<Boolean, PlayerFigure>(true, field.getPlayer());
+
+        return newPair;
     }
 
     private PlayerFigure findFigureViaPolygon(Polygon polygon) {
@@ -322,7 +382,11 @@ public class MainService {
         GridPane.setColumnIndex(source.getPolygon(), colIndex);
         GridPane.setRowIndex(source.getPolygon(), rowIndex);
 
+        Field fieldToDeletePlayer = source.getPosition();
+
         source.setPosition(dest);
+        fieldToDeletePlayer.setPlayer(null);
+
         dest.setPlayer(source);
     }
 

@@ -44,6 +44,10 @@ public class Player {
     public Field getStartField(){
         return this.startField;
     }
+    public boolean isEntranceToEndone(Field field){
+
+        return field.getId() == ((startField.getId() + 39) % 40);
+    }
 
     public PlayerFigure[] getPlayerFigures() {
         return this.playerFigures;
