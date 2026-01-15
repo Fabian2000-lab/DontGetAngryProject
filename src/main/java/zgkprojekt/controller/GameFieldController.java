@@ -4,6 +4,7 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Circle;
 import zgkprojekt.model.Dice;
@@ -26,7 +27,6 @@ public class GameFieldController {
 
     public void setup() {
         _service = MainService.getInstance();
-
         _service.fillPlayingBoard(mainPane);
 
 
