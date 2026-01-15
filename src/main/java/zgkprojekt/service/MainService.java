@@ -266,8 +266,8 @@ public class MainService {
                     {
                     int newIndexPosition = Dice.getCurrentDiceRoll() + i;
 
-                    //if(newIndexPosition < 4)
-                        newPosition = endzone.get(i + 1);
+                    if(newIndexPosition < 4)
+                        newPosition = endzone.get(newIndexPosition);
                 break;
                 }
             }
@@ -278,12 +278,11 @@ public class MainService {
             boolean hasBeenInEndzoneCheck = false;
             var endzone = _playingField.getActivePlayer().getEnzone().getEndzones();
 
-            for(int i = 1; i <= Dice.getCurrentDiceRoll(); i++){
-
+            for(int i = 0; i < Dice.getCurrentDiceRoll(); i++){
                 if(_playingField.getActivePlayer().isEntranceToEndone(_playingField.getTrack().get((field.getId() + i ) % 40))){
 
                     //Now check for OutOfBounds
-                    int postitionCheckInEndzone = Dice.getCurrentDiceRoll() - i;
+                    int postitionCheckInEndzone = Dice.getCurrentDiceRoll() - i - 1;
 
                     if(postitionCheckInEndzone < 4 )
                         newPosition = endzone.get(postitionCheckInEndzone);
