@@ -11,11 +11,12 @@ public class Player {
     private EffectType effect;
     private Home home;
     private Endzone endzone;
+    private final Field startField;
     private String extra1;
     private String extra2;
     private String extra3;
 
-    public Player (String id, String name, Endzone endzones, Home home) {
+    public Player (String id, String name, Endzone endzones, Home home, Field startField) {
         this.id = id; 
         this.name = name;
         this.inventory = new Inventory();
@@ -23,6 +24,7 @@ public class Player {
         this.activeEffect = false;
         this.home = home;
         this.endzone = endzones;
+        this.startField = startField;
     }
 
     private PlayerFigure[] initializePlayerFigureIds() {
@@ -37,6 +39,14 @@ public class Player {
 
     public String getName(){
         return name;
+    }
+
+    public Field getStartField(){
+        return this.startField;
+    }
+    public boolean isEntranceToEndone(Field field){
+
+        return field.getId() == ((startField.getId() + 39) % 40);
     }
 
     public PlayerFigure[] getPlayerFigures() {

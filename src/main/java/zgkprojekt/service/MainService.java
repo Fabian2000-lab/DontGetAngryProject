@@ -13,6 +13,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
+import kotlin.Pair;
 import zgkprojekt.enums.FieldType;
 import zgkprojekt.model.*;
 import javafx.scene.Scene;
@@ -103,12 +104,7 @@ public class MainService {
             allHomes.add(aHome);
         }
 
-        for(int i = 0; i < playerNames.length; i++)
-        {
-            Player player = new Player(Integer.toString(i+1), playerNames[i], allEndzones.get(i), allHomes.get(i));
 
-            players.add(player);
-        }
 
         for(var a : mainPane.getChildren()){
             if(a instanceof Circle b){
@@ -152,6 +148,15 @@ public class MainService {
             }
         }
 
+        fields.sort(Comparator.comparingInt(Field::getId));
+
+        for(int i = 0; i < playerNames.length; i++)
+        {
+            Player player = new Player(Integer.toString(i+1), playerNames[i], allEndzones.get(i), allHomes.get(i), fields.get(i * 10));
+
+            players.add(player);
+        }
+
         for(int i = 0; i < _playingField.getPlayers().size(); i++){
 
             PlayerFigure[] figures = _playingField.getPlayers().get(i).getPlayerFigures();
@@ -165,7 +170,6 @@ public class MainService {
         }
         _playingField.setHomes(allHomes);
         _playingField.setEndzones(allEndzones);
-        fields.sort(Comparator.comparingInt(Field::getId));
 
         int playerCount = getPlayerCount();
 
@@ -243,31 +247,89 @@ public class MainService {
             return;
 
         Field newPosition = null;
-
-        boolean invalidMove = true;
+        boolean validMove = false;
+        PlayerFigure collisionObject = null;
 
         int currentFieldId = field.getId();
 
 
         if(Dice.getCurrentDiceRoll() == 6 && ((currentFieldId >= 110 && currentFieldId <= 113) || (currentFieldId >= 120 && currentFieldId <= 123) || (currentFieldId >= 130 && currentFieldId <= 133) || (currentFieldId >= 140 && currentFieldId <= 143)))
         {
-            newPosition = _playingField.getTrack().get(0);
+            newPosition = _playingField.getActivePlayer().getStartField();
 
-            invalidMove = false;
-        } else if (currentFieldId < 40) {
+        }else if((currentFieldId >= 210 && currentFieldId <= 213) || (currentFieldId >= 220 && currentFieldId <= 223) || (currentFieldId >= 230 && currentFieldId <= 233) || (currentFieldId >= 240 && currentFieldId <= 243)){
 
-            newPosition = _playingField.getTrack().get((currentFieldId + Dice.getCurrentDiceRoll()) % 40);
+            var endzone = _playingField.getActivePlayer().getEnzone().getEndzones();
 
-            invalidMove = false;
+            for(int i = 0; i < endzone.size(); i++){
+                if(endzone.get(i).getPlayer() == player)
+                    {
+                    int newIndexPosition = Dice.getCurrentDiceRoll() + i;
+
+                    if(newIndexPosition < 4)
+                        newPosition = endzone.get(newIndexPosition);
+                break;
+                }
+            }
+        }
+        else if (currentFieldId < 40) {
+
+            //Check if player goes into Endzone
+            boolean hasBeenInEndzoneCheck = false;
+            var endzone = _playingField.getActivePlayer().getEnzone().getEndzones();
+
+            for(int i = 0; i < Dice.getCurrentDiceRoll(); i++){
+                if(_playingField.getActivePlayer().isEntranceToEndone(_playingField.getTrack().get((field.getId() + i ) % 40))){
+
+                    //Now check for OutOfBounds
+                    int postitionCheckInEndzone = Dice.getCurrentDiceRoll() - i - 1;
+
+                    if(postitionCheckInEndzone < 4 )
+                        newPosition = endzone.get(postitionCheckInEndzone);
+
+                    hasBeenInEndzoneCheck = true;
+                }
+
+            }
+            if(!hasBeenInEndzoneCheck)
+                newPosition = _playingField.getTrack().get((currentFieldId + Dice.getCurrentDiceRoll()) % 40);
         }
 
-        if(!invalidMove)
+        Pair<Boolean, PlayerFigure> pair = null;
+
+        if(newPosition == null)
+        {
+            System.out.println("OutOfBounds");
+            return;
+        }
+
+
+        pair = collisionCheck(newPosition);
+
+        if(pair.getFirst())
+            System.out.println("COLISSION!!");
+
+        if(!pair.getFirst() || (pair.getFirst() && _playingField.getActivePlayer() != pair.getSecond().getOwner()))
+            validMove = true;
+
+        if(validMove)
         {
             moveTo(player, newPosition);
             _playingField.nextPlayer();
 
             System.out.printf("%s ist an der Reihe.%n", _playingField.getActivePlayer().getName());
         }
+    }
+
+    private Pair<Boolean, PlayerFigure> collisionCheck(Field field) {
+        //return true if there is a collision and with which PlayerFigure
+
+        Pair<Boolean, PlayerFigure> newPair = new Pair<Boolean, PlayerFigure>(false, null);
+
+        if(field.getPlayer() != null)
+            newPair = new Pair<Boolean, PlayerFigure>(true, field.getPlayer());
+
+        return newPair;
     }
 
     private PlayerFigure findFigureViaPolygon(Polygon polygon) {
@@ -319,7 +381,11 @@ public class MainService {
         GridPane.setColumnIndex(source.getPolygon(), colIndex);
         GridPane.setRowIndex(source.getPolygon(), rowIndex);
 
+        Field fieldToDeletePlayer = source.getPosition();
+
         source.setPosition(dest);
+        fieldToDeletePlayer.setPlayer(null);
+
         dest.setPlayer(source);
     }
 
