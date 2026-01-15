@@ -103,12 +103,7 @@ public class MainService {
             allHomes.add(aHome);
         }
 
-        for(int i = 0; i < playerNames.length; i++)
-        {
-            Player player = new Player(Integer.toString(i+1), playerNames[i], allEndzones.get(i), allHomes.get(i));
 
-            players.add(player);
-        }
 
         for(var a : mainPane.getChildren()){
             if(a instanceof Circle b){
@@ -152,6 +147,15 @@ public class MainService {
             }
         }
 
+        fields.sort(Comparator.comparingInt(Field::getId));
+
+        for(int i = 0; i < playerNames.length; i++)
+        {
+            Player player = new Player(Integer.toString(i+1), playerNames[i], allEndzones.get(i), allHomes.get(i), fields.get(i * 10));
+
+            players.add(player);
+        }
+
         for(int i = 0; i < _playingField.getPlayers().size(); i++){
 
             PlayerFigure[] figures = _playingField.getPlayers().get(i).getPlayerFigures();
@@ -165,7 +169,6 @@ public class MainService {
         }
         _playingField.setHomes(allHomes);
         _playingField.setEndzones(allEndzones);
-        fields.sort(Comparator.comparingInt(Field::getId));
 
         int playerCount = getPlayerCount();
 
@@ -244,24 +247,24 @@ public class MainService {
 
         Field newPosition = null;
 
-        boolean invalidMove = true;
+        boolean validMove = false;
 
         int currentFieldId = field.getId();
 
 
         if(Dice.getCurrentDiceRoll() == 6 && ((currentFieldId >= 110 && currentFieldId <= 113) || (currentFieldId >= 120 && currentFieldId <= 123) || (currentFieldId >= 130 && currentFieldId <= 133) || (currentFieldId >= 140 && currentFieldId <= 143)))
         {
-            newPosition = _playingField.getTrack().get(0);
+            newPosition = _playingField.getActivePlayer().getStartField();
 
-            invalidMove = false;
+            validMove = true;
         } else if (currentFieldId < 40) {
 
             newPosition = _playingField.getTrack().get((currentFieldId + Dice.getCurrentDiceRoll()) % 40);
 
-            invalidMove = false;
+            validMove = true;
         }
 
-        if(!invalidMove)
+        if(validMove)
         {
             moveTo(player, newPosition);
             _playingField.nextPlayer();
