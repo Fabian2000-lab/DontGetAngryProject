@@ -4,7 +4,10 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 
+import javafx.scene.control.TextArea;
 import zgkprojekt.enums.EventType;
+
+import javax.swing.*;
 
 public class PlayingField {
     private ArrayList<Field> track;
@@ -13,6 +16,7 @@ public class PlayingField {
     private ArrayList<Home> homes;
     private Event currentMapEvent;
     private ArrayDeque<Player> activePlayer;
+    private TextArea console;
 
     public PlayingField(ArrayList<Field> track, ArrayList<Player> players) {
         this.track = track;
@@ -42,6 +46,14 @@ public class PlayingField {
 
     public void setCurrentMapEvent(EventType eventType) {
         this.currentMapEvent = new Event(eventType, this.players.size());
+    }
+
+    public void setConsole(TextArea console) {
+        this.console = console;
+    }
+
+    public void log(String message) {
+        console.appendText(message + "\n");
     }
 
     public Event getCurrentMapEvent() {

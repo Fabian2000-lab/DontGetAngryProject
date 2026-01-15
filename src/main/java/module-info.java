@@ -11,6 +11,7 @@ module zgkprojekt.dontgetangry {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires javafx.graphics;
+    requires java.desktop;
 
     opens zgkprojekt.dontgetangry to javafx.fxml;
     exports zgkprojekt.dontgetangry;

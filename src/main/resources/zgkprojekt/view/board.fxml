@@ -130,10 +130,11 @@
          <font>
             <Font name="Constantia" size="18.0" />
          </font></Button>
-      <TextArea editable="false" maxWidth="375.0" GridPane.columnIndex="15" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="9">
+      <TextArea fx:id="console" editable="false" maxWidth="375.0" GridPane.columnIndex="15" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="9">
          <font>
             <Font name="Constantia Bold" size="14.0" />
-         </font></TextArea>
+         </font>
+      </TextArea>
       <Button mnemonicParsing="false" prefHeight="121.0" prefWidth="101.0" text="Skip" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
          <font>
             <Font name="Constantia" size="19.0" />
