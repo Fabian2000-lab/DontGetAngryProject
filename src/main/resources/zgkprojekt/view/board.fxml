@@ -126,7 +126,7 @@
        <Circle fx:id="37" fill="9370db" radius="27.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="8" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
        <Circle fx:id="38" fill="9370db" radius="27.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="8" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
        <Circle fx:id="39" fill="9370db" radius="27.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="9" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-      <Button fx:id="moveButton" mnemonicParsing="false" onAction="#handleMoveButtonClick" prefHeight="106.0" prefWidth="101.0" text="Roll" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <Button fx:id="rollButton" mnemonicParsing="false" onAction="#handleMoveButtonClick" prefHeight="106.0" prefWidth="101.0" text="Roll" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <font>
             <Font name="Constantia" size="18.0" />
          </font></Button>
