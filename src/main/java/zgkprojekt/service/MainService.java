@@ -239,9 +239,9 @@ public class MainService {
             }
         }
 
-        _playingField.log("Spielaufbau fertig...");
+        _playingField.log("Game loaded successfully...");
         _playingField.log("--------------------");
-        _playingField.log(_playingField.getPlayers().get(0).getName() + " würfeln um eine Reinfolge zu bestimmen.");
+        _playingField.log(_playingField.getPlayers().get(0).getName() + " roll to decide the playing order.");
 
     }
 
@@ -336,7 +336,7 @@ public class MainService {
             _playingField.nextPlayer();
 
             _playingField.log("--------------------");
-            _playingField.log(_playingField.getActivePlayer().getName() + " ist an der Reihe.");
+            _playingField.log("Now it's " + _playingField.getActivePlayer().getName() + "'s turn.");
         }
     }
 
@@ -503,7 +503,7 @@ public class MainService {
         if(_playingField.getPlayers().size() == orderMap.size()){
             Dice.roll();
 
-            _playingField.log(_playingField.getActivePlayer().getName() + " hat eine " + Dice.getCurrentDiceRoll() + " gerollt.");
+            _playingField.log(_playingField.getActivePlayer().getName() + " rolled a " + Dice.getCurrentDiceRoll() + ".");
         }
         //Game is still deciding the order of the players
         else
@@ -513,11 +513,11 @@ public class MainService {
             } while (orderMap.containsValue(Dice.getCurrentDiceRoll()));
 
             System.out.printf("%s rolled a %d%n",_playingField.getPlayers().get(orderMap.size()).getName(), Dice.getCurrentDiceRoll());
-            _playingField.log(_playingField.getPlayers().get(orderMap.size()).getName() + " hat eine " + Dice.getCurrentDiceRoll() + " gerollt.");
+            _playingField.log(_playingField.getPlayers().get(orderMap.size()).getName() + " rolled a " + Dice.getCurrentDiceRoll() + ".");
 
             if(_playingField.getPlayers().size() > orderMap.size() + 1) {
-                System.out.printf("Als nächstes würfelt %s%n", _playingField.getPlayers().get(orderMap.size() + 1).getName());
-                _playingField.log("Als nächstes würfelt " + _playingField.getPlayers().get(orderMap.size() + 1).getName());
+                System.out.printf("Next to roll the dice is %s%n", _playingField.getPlayers().get(orderMap.size() + 1).getName());
+                _playingField.log("Next to roll the dice is " + _playingField.getPlayers().get(orderMap.size() + 1).getName());
             }
 
             orderMap.put(_playingField.getPlayers().get(orderMap.size()), Dice.getCurrentDiceRoll());
@@ -535,10 +535,10 @@ public class MainService {
                 _playingField.setActivePlayerQueue(queue);
 
                 for(int i = 0; i < _playingField.getPlayers().size(); i++) {
-                    System.out.printf("Reinfolge: %d. %s%n", i+1, _playingField.getActivePlayer().getName());
+                    System.out.printf("Playing order: %d. %s%n", i+1, _playingField.getActivePlayer().getName());
 
                     if (i == 0) {
-                        _playingField.log("Reinfolge: ");
+                        _playingField.log("Playing order: ");
                     }
 
                     _playingField.log((i + 1) + ". " + _playingField.getActivePlayer().getName());
@@ -546,8 +546,8 @@ public class MainService {
                     _playingField.nextPlayer();
                 }
 
-                System.out.printf("%n%s Beginnt!%n",_playingField.getActivePlayer().getName());
-                _playingField.log(_playingField.getActivePlayer().getName() + " Beginnt!");
+                System.out.printf("%n%s starts!%n",_playingField.getActivePlayer().getName());
+                _playingField.log(_playingField.getActivePlayer().getName() + " starts!");
                 _playingField.log("--------------------");
 
             }
