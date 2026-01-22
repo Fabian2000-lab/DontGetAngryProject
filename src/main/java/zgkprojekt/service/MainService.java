@@ -19,7 +19,6 @@ import zgkprojekt.enums.FieldType;
 import zgkprojekt.model.*;
 import javafx.scene.Scene;
 
-import javax.swing.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,6 +30,7 @@ public class MainService {
     private Scene _scene;
     private String[] playerNames;
     private HashMap<Player, Integer> orderMap = new HashMap<>();
+    private Button _rollButton;
 
     private MainService()
     {
@@ -266,6 +266,13 @@ public class MainService {
     }
 
     private void handlePolygonClick(MouseEvent mouseEvent) {
+
+        if(!_rollButton.isDisabled())
+        {
+            _playingField.log("Roll first!.");
+            return;
+        }
+
         Polygon polygon = (Polygon) mouseEvent.getSource();
 
         PlayerFigure player = findFigureViaPolygon(polygon);
@@ -342,7 +349,7 @@ public class MainService {
             if((pair.getFirst() && _playingField.getActivePlayer() != pair.getSecond().getOwner()))
             {
                 kickFigure(pair.getSecond());
-                _playingField.log(String.format("%s kicked a figure of %s%n", _playingField.getActivePlayer().getName(), pair.getSecond().getOwner().getName()));
+                _playingField.log(String.format("%s kicked a figure of %s", _playingField.getActivePlayer().getName(), pair.getSecond().getOwner().getName()));
             }
 
             
@@ -361,6 +368,7 @@ public class MainService {
             }
 
             _playingField.nextPlayer();
+            _rollButton.setDisable(false);
 
             _playingField.log("--------------------");
             _playingField.log("Now it's " + _playingField.getActivePlayer().getName() + "'s turn.");
@@ -527,6 +535,8 @@ public class MainService {
 
     public void diceButton() {
 
+        _rollButton.setDisable(true);
+
         if(_playingField.getPlayers().size() == orderMap.size()){
             Dice.roll();
 
@@ -548,6 +558,8 @@ public class MainService {
             }
 
             orderMap.put(_playingField.getPlayers().get(orderMap.size()), Dice.getCurrentDiceRoll());
+
+            _rollButton.setDisable(false);
 
             if(orderMap.size() == _playingField.getPlayers().size())
             {
@@ -583,9 +595,14 @@ public class MainService {
 
     }
 
+    public void setMoveButton(Button rollbutton) {
+        _rollButton = rollbutton;
+    }
+
     public void skipButton(){
         _playingField.log(_playingField.getActivePlayer().getName() + " skipped his turn");
         _playingField.nextPlayer();
+        _rollButton.setDisable(false);
         _playingField.log("--------------------");
         _playingField.log("Now it's " + _playingField.getActivePlayer().getName() + "'s turn.");
     }

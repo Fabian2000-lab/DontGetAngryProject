@@ -20,13 +20,14 @@ public class GameFieldController {
     private GridPane mainPane;
 
     @FXML
-    private Button moveButton;
+    private Button rollButton;
 
     @FXML
     private Label moveLabel;
 
     public void setup() {
         _service = MainService.getInstance();
+        _service.setMoveButton(rollButton);
         _service.fillPlayingBoard(mainPane);
 
 
