@@ -38,4 +38,10 @@ public class GameFieldController {
     {
         _service.diceButton();
     }
+
+    @FXML
+    public void handleSkipButtonClick()
+    {
+        _service.skipButton();
+    }
 }
