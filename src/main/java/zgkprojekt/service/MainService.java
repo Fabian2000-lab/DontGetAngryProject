@@ -595,8 +595,8 @@ public class MainService {
 
     }
 
-    public void setMoveButton(Button moveButton) {
-        _rollButton = moveButton;
+    public void setMoveButton(Button rollbutton) {
+        _rollButton = rollbutton;
     }
 
     public void skipButton(){
