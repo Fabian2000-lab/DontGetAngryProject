@@ -318,7 +318,17 @@ public class MainService {
             System.out.println("COLISSION!!");
 
         if(!pair.getFirst() || (pair.getFirst() && _playingField.getActivePlayer() != pair.getSecond().getOwner()))
-            validMove = true;
+        {
+            if((pair.getFirst() && _playingField.getActivePlayer() != pair.getSecond().getOwner()))
+            {
+                kickFigure(pair.getSecond());
+                _playingField.log(String.format("%s kicked a figure from %s%n", _playingField.getActivePlayer().getName(), pair.getSecond().getOwner().getName()));
+            }
+
+            
+            validMove = true;            
+        }
+            
 
         if(validMove)
         {
@@ -328,6 +338,21 @@ public class MainService {
             _playingField.log("--------------------");
             _playingField.log(_playingField.getActivePlayer().getName() + " ist an der Reihe.");
         }
+    }
+
+    private void kickFigure(PlayerFigure second)
+    {
+        List<Field> homeFields = second.getOwner().getHome().getHomeFields();
+
+        for(int i = 0; i < homeFields.size(); i++)
+        {
+            if(homeFields.get(i).getPlayer() == null)
+            {
+                moveTo(second, homeFields.get(i));
+                break;
+            }
+        }
+
     }
 
     private Pair<Boolean, PlayerFigure> collisionCheck(Field field) {
