@@ -80,7 +80,27 @@ public class MainService {
     }
 
     public boolean checkForWinner() {
+
+        List<Player> players = _playingField.getPlayers();
+
+        for(Player player : players)
+        {
+            int counter = 0;
+            for(int i = 0; i < 4; i++)
+            {
+                if(player.getEnzone().getEndzones().get(i).getPlayer() != null)
+                    counter++;
+            }
+
+            if(counter == 4)
+            {
+                _playingField.log(String.format("%s hat gewonnen!", player.getName()));
+                return true;
+            }
+        }
+
         return false;
+
     }
 
     public void saveDataToDataBase() {
@@ -326,13 +346,20 @@ public class MainService {
             }
 
             
-            validMove = true;            
+            validMove = true;
         }
             
 
         if(validMove)
         {
             moveTo(player, newPosition);
+
+            if(checkForWinner())
+            {
+                //gameEnds();
+                return;
+            }
+
             _playingField.nextPlayer();
 
             _playingField.log("--------------------");
