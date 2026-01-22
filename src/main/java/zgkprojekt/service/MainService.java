@@ -31,6 +31,7 @@ public class MainService {
     private String[] playerNames;
     private HashMap<Player, Integer> orderMap = new HashMap<>();
     private Button _rollButton;
+    private int _currentRollAmount;
 
     private MainService()
     {
@@ -109,6 +110,7 @@ public class MainService {
 
     public void fillPlayingBoard(GridPane mainPane) {
 
+        _currentRollAmount = 0;
         ArrayList<Field> fields = new ArrayList<Field>();
         ArrayList<Player> players = new ArrayList<Player>();
         _playingField = new PlayingField(fields, players);
@@ -267,7 +269,7 @@ public class MainService {
 
     private void handlePolygonClick(MouseEvent mouseEvent) {
 
-        if(!_rollButton.isDisabled())
+        if(_currentRollAmount < 1)
         {
             _playingField.log("Roll first!.");
             return;
@@ -369,6 +371,7 @@ public class MainService {
 
             _playingField.nextPlayer();
             _rollButton.setDisable(false);
+            _currentRollAmount = 0;
 
             _playingField.log("--------------------");
             _playingField.log("Now it's " + _playingField.getActivePlayer().getName() + "'s turn.");
@@ -538,10 +541,28 @@ public class MainService {
         _rollButton.setDisable(true);
 
         if(_playingField.getPlayers().size() == orderMap.size()){
-            Dice.roll();
 
-            _playingField.log(_playingField.getActivePlayer().getName() + " rolled a " + Dice.getCurrentDiceRoll() + ".");
-        }
+            Dice.roll();
+            _currentRollAmount++;
+
+            //Player has no active player on the board, he may roll multiple times
+            if(!hasPlayingFiguresOnBoard(_playingField.getActivePlayer()) && _currentRollAmount <= 3)
+            {
+                _playingField.log("Roll " + _currentRollAmount + "/3 " + _playingField.getActivePlayer().getName() + " rolled a " + Dice.getCurrentDiceRoll() + ".");
+
+                _rollButton.setDisable(false);
+
+                if(_currentRollAmount == 3)
+                    _rollButton.setDisable(true);
+
+            } else
+            {
+                _playingField.log(_playingField.getActivePlayer().getName() + " rolled a " + Dice.getCurrentDiceRoll() + ".");
+            }
+
+
+
+           }
         //Game is still deciding the order of the players
         else
         {
@@ -583,6 +604,7 @@ public class MainService {
                     _playingField.log((i + 1) + ". " + _playingField.getActivePlayer().getName());
 
                     _playingField.nextPlayer();
+
                 }
 
                 System.out.printf("%n%s starts!%n",_playingField.getActivePlayer().getName());
@@ -595,6 +617,17 @@ public class MainService {
 
     }
 
+    private boolean hasPlayingFiguresOnBoard(Player player)
+    {
+        for(Field field : _playingField.getTrack())
+        {
+            if(field.getPlayer() != null && field.getPlayer().getOwner() == player)
+                return true;
+        }
+
+        return false;
+    }
+
     public void setMoveButton(Button rollbutton) {
         _rollButton = rollbutton;
     }
@@ -602,6 +635,7 @@ public class MainService {
     public void skipButton(){
         _playingField.log(_playingField.getActivePlayer().getName() + " skipped his turn");
         _playingField.nextPlayer();
+        _currentRollAmount = 0;
         _rollButton.setDisable(false);
         _playingField.log("--------------------");
         _playingField.log("Now it's " + _playingField.getActivePlayer().getName() + "'s turn.");
