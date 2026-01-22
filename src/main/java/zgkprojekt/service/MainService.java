@@ -342,7 +342,7 @@ public class MainService {
             if((pair.getFirst() && _playingField.getActivePlayer() != pair.getSecond().getOwner()))
             {
                 kickFigure(pair.getSecond());
-                _playingField.log(String.format("%s kicked a figure from %s%n", _playingField.getActivePlayer().getName(), pair.getSecond().getOwner().getName()));
+                _playingField.log(String.format("%s kicked a figure of %s%n", _playingField.getActivePlayer().getName(), pair.getSecond().getOwner().getName()));
             }
 
             
@@ -581,6 +581,13 @@ public class MainService {
         }
 
 
+    }
+
+    public void skipButton(){
+        _playingField.log(_playingField.getActivePlayer().getName() + " skipped his turn");
+        _playingField.nextPlayer();
+        _playingField.log("--------------------");
+        _playingField.log("Now it's " + _playingField.getActivePlayer().getName() + "'s turn.");
     }
 
     public static class FigureDefinitions{

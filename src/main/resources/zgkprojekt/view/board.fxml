@@ -135,7 +135,7 @@
             <Font name="Constantia Bold" size="14.0" />
          </font>
       </TextArea>
-      <Button mnemonicParsing="false" prefHeight="121.0" prefWidth="101.0" text="Skip" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+      <Button fx:id="skipButton" mnemonicParsing="false" onAction="#handleSkipButtonClick" prefHeight="121.0" prefWidth="101.0" text="Skip" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
          <font>
             <Font name="Constantia" size="19.0" />
          </font>
