@@ -535,7 +535,6 @@ public class MainService {
 
     public void diceButton() {
 
-
         _rollButton.setDisable(true);
 
         if(_playingField.getPlayers().size() == orderMap.size()){
@@ -559,6 +558,8 @@ public class MainService {
             }
 
             orderMap.put(_playingField.getPlayers().get(orderMap.size()), Dice.getCurrentDiceRoll());
+
+            _rollButton.setDisable(false);
 
             if(orderMap.size() == _playingField.getPlayers().size())
             {
@@ -589,7 +590,6 @@ public class MainService {
                 _playingField.log("--------------------");
 
             }
-            _rollButton.setDisable(false);
         }
 
 
