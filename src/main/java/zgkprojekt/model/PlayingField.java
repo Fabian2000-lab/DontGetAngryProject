@@ -50,6 +50,7 @@ public class PlayingField {
 
     public void setConsole(TextArea console) {
         this.console = console;
+        console.setWrapText(true);
     }
 
     public void log(String message) {
