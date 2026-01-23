@@ -23,6 +23,7 @@ public class HelloApplication extends Application {
 
         stage.setTitle("DontGetAngry™");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 }
