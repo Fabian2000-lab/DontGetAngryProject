@@ -575,10 +575,10 @@ public class MainService {
                 Dice.roll();
             } while (orderMap.containsValue(Dice.getCurrentDiceRoll()));
 
-            _playingField.log(_playingField.getPlayers().get(orderMap.size()).getName() + " rolled a " + Dice.getCurrentDiceRoll() + ".");
+            _playingField.log( _playingField.getPlayers().get(orderMap.size()).getName() + " \uD83C\uDFB2 " + Dice.getCurrentDiceRoll(), Color.BLACK );
 
             if(_playingField.getPlayers().size() > orderMap.size() + 1) {
-                _playingField.log("Next to roll the dice is " + _playingField.getPlayers().get(orderMap.size() + 1).getName());
+                _playingField.log("Next to roll the dice is " + _playingField.getPlayers().get(orderMap.size() + 1).getName(), Color.BLACK);
             }
 
             orderMap.put(_playingField.getPlayers().get(orderMap.size()), Dice.getCurrentDiceRoll());
@@ -665,7 +665,7 @@ public class MainService {
         {
             case STORM:
             {
-                _playingField.log("A STORM rises!");
+                _playingField.log("A STORM rises!", Color.BLACK);
                 int stormFields = 0;
 
                 while(stormFields < 3)
