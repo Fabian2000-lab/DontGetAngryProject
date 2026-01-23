@@ -3,7 +3,6 @@ package zgkprojekt.service;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
@@ -15,7 +14,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextFlow;
 import kotlin.Pair;
 import zgkprojekt.enums.FieldType;
 import zgkprojekt.model.*;
@@ -173,12 +171,9 @@ public class MainService {
 
             }
 
-             if (a instanceof ScrollPane sp) {
-                 if (sp.getContent() instanceof TextFlow console) {
-                     _playingField.setTextFlow(console, sp);
-                 }
-                // _playingField.setConsole(console);
-             }
+            if (a instanceof TextArea console) {
+                _playingField.setConsole(console);
+            }
         }
 
         fields.sort(Comparator.comparingInt(Field::getId));
@@ -266,9 +261,9 @@ public class MainService {
             }
         }
 
-        _playingField.log("Game successfully setup...", Color.BLACK);
-        _playingField.log("----------------------------------------", Color.GRAY);
-        _playingField.playerLog(" - starts the roll to determine the turn sequence", _playingField.getPlayers().getFirst().getName(),  Color.BLACK, Color.BLACK);
+        _playingField.log("Game loaded successfully...");
+        _playingField.log("--------------------");
+        _playingField.log(_playingField.getPlayers().get(0).getName() + " roll to decide the playing order.");
 
     }
 
@@ -378,8 +373,8 @@ public class MainService {
             _rollButton.setDisable(false);
             _currentRollAmount = 0;
 
-            _playingField.log("----------------------------------------", Color.GRAY);
-            _playingField.playerLog(" - goes", _playingField.getActivePlayer().getName(), (Color) _playingField.getActivePlayer().getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK );
+            _playingField.log("--------------------");
+            _playingField.log("Now it's " + _playingField.getActivePlayer().getName() + "'s turn.");
         }
     }
 
@@ -550,10 +545,6 @@ public class MainService {
             Dice.roll();
             _currentRollAmount++;
 
-
-            _playingField.playerLog(" \uD83C\uDFB2 " + Dice.getCurrentDiceRoll(), _playingField.getActivePlayer().getName(),  (Color) _playingField.getActivePlayer().getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK);
-        }
-
             //Player has no active player on the board, he may roll multiple times
             if(!hasPlayingFiguresOnBoard(_playingField.getActivePlayer()) && _currentRollAmount <= 3)
             {
@@ -580,10 +571,11 @@ public class MainService {
             } while (orderMap.containsValue(Dice.getCurrentDiceRoll()));
 
             System.out.printf("%s rolled a %d%n",_playingField.getPlayers().get(orderMap.size()).getName(), Dice.getCurrentDiceRoll());
-            _playingField.playerLog(" rolled a " + Dice.getCurrentDiceRoll(), _playingField.getPlayers().get(orderMap.size()).getName(), Color.BLACK, Color.BLACK );
+            _playingField.log(_playingField.getPlayers().get(orderMap.size()).getName() + " rolled a " + Dice.getCurrentDiceRoll() + ".");
+
             if(_playingField.getPlayers().size() > orderMap.size() + 1) {
-                System.out.printf("Als nächstes würfelt %s%n", _playingField.getPlayers().get(orderMap.size() + 1).getName());
-                _playingField.playerLog(" rolls next", _playingField.getPlayers().get(orderMap.size() + 1).getName(), Color.BLACK, Color.BLACK);
+                System.out.printf("Next to roll the dice is %s%n", _playingField.getPlayers().get(orderMap.size() + 1).getName());
+                _playingField.log("Next to roll the dice is " + _playingField.getPlayers().get(orderMap.size() + 1).getName());
             }
 
             orderMap.put(_playingField.getPlayers().get(orderMap.size()), Dice.getCurrentDiceRoll());
@@ -606,18 +598,18 @@ public class MainService {
                     System.out.printf("Playing order: %d. %s%n", i+1, _playingField.getActivePlayer().getName());
 
                     if (i == 0) {
-                        _playingField.log("Sequence: ", Color.BLACK);
+                        _playingField.log("Playing order: ");
                     }
 
-                    _playingField.playerLog(" ", _playingField.getActivePlayer().getName(), (Color) _playingField.getActivePlayer().getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK);
+                    _playingField.log((i + 1) + ". " + _playingField.getActivePlayer().getName());
 
                     _playingField.nextPlayer();
 
                 }
 
-                System.out.printf("%n%s Beginnt!%n",_playingField.getActivePlayer().getName());
-                _playingField.playerLog(" Starts!", _playingField.getActivePlayer().getName() , (Color) _playingField.getActivePlayer().getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK);
-                _playingField.log("----------------------------------------", Color.GRAY);
+                System.out.printf("%n%s starts!%n",_playingField.getActivePlayer().getName());
+                _playingField.log(_playingField.getActivePlayer().getName() + " starts!");
+                _playingField.log("--------------------");
 
             }
         }
