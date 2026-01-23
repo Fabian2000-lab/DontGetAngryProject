@@ -15,7 +15,9 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import kotlin.Pair;
+import zgkprojekt.enums.EventType;
 import zgkprojekt.enums.FieldType;
+import zgkprojekt.enums.enumHelper.EventTypeHelper;
 import zgkprojekt.model.*;
 import javafx.scene.Scene;
 
@@ -32,6 +34,7 @@ public class MainService {
     private HashMap<Player, Integer> orderMap = new HashMap<>();
     private Button _rollButton;
     private int _currentRollAmount;
+    private PlayerFigure lastMovedFigure;
 
     private MainService()
     {
@@ -343,8 +346,6 @@ public class MainService {
 
         pair = collisionCheck(newPosition);
 
-        if(pair.getFirst())
-            System.out.println("COLISSION!!");
 
         if(!pair.getFirst() || (pair.getFirst() && _playingField.getActivePlayer() != pair.getSecond().getOwner()))
         {
@@ -363,6 +364,10 @@ public class MainService {
         {
             moveTo(player, newPosition);
 
+            lastMovedFigure = player;
+
+            checkForMapEvent();
+
             if(checkForWinner())
             {
                 //gameEnds();
@@ -377,6 +382,8 @@ public class MainService {
             _playingField.log("Now it's " + _playingField.getActivePlayer().getName() + "'s turn.");
         }
     }
+
+
 
     private void kickFigure(PlayerFigure second)
     {
@@ -529,12 +536,6 @@ public class MainService {
         return true;
     }
 
-    public void decidePlayingOrder() {
-
-        _playingField.getPlayers();
-
-
-    }
 
     public void diceButton() {
 
@@ -570,11 +571,9 @@ public class MainService {
                 Dice.roll();
             } while (orderMap.containsValue(Dice.getCurrentDiceRoll()));
 
-            System.out.printf("%s rolled a %d%n",_playingField.getPlayers().get(orderMap.size()).getName(), Dice.getCurrentDiceRoll());
             _playingField.log(_playingField.getPlayers().get(orderMap.size()).getName() + " rolled a " + Dice.getCurrentDiceRoll() + ".");
 
             if(_playingField.getPlayers().size() > orderMap.size() + 1) {
-                System.out.printf("Next to roll the dice is %s%n", _playingField.getPlayers().get(orderMap.size() + 1).getName());
                 _playingField.log("Next to roll the dice is " + _playingField.getPlayers().get(orderMap.size() + 1).getName());
             }
 
@@ -611,11 +610,77 @@ public class MainService {
                 _playingField.log(_playingField.getActivePlayer().getName() + " starts!");
                 _playingField.log("--------------------");
 
+                newMapEvent();
             }
         }
 
 
     }
+
+    private void checkForMapEvent() {
+
+        EventType currentMapEvent = _playingField.getCurrentMapEvent().getEventType();
+
+        switch(currentMapEvent)
+        {
+            case STORM:
+            {
+                if(lastMovedFigure.getPosition().getEffect() == null)
+                    break;
+
+                boolean invalidField = true;
+
+                for(int i = lastMovedFigure.getPosition().getId() - 2 ; invalidField; i--)
+                {
+                    if(i < 0)
+                        i += 40;
+
+                    if(!(_playingField.getTrack().get(i).getPlayer() != null && _playingField.getTrack().get(i).getPlayer().getOwner() == _playingField.getActivePlayer()))
+                    {
+                        invalidField = false;
+                        moveTo(lastMovedFigure, _playingField.getTrack().get(i));
+                    }
+                }
+
+                break;
+            }
+
+        }
+
+    }
+
+    private void newMapEvent() {
+
+        //if(_playingField.getCurrentMapEvent() != null)
+            //removeMapEvent();
+
+        EventType newMapEvent = EventType.STORM; //Fürs zeigen kurz statisch stellen EventTypeHelper.getRandomEventType();
+        _playingField.setCurrentMapEvent(newMapEvent);
+
+        switch (newMapEvent)
+        {
+            case STORM:
+            {
+                _playingField.log("A STORM rises!");
+                int stormFields = 0;
+
+                while(stormFields < 3)
+                {
+                    Field field = _playingField.getTrack().get((int) (Math.random() * _playingField.getTrack().size()));
+
+                    if(!(field.getId() % 10 == 0 || field.getPlayer() != null))
+                    {
+                        field.setEffectType(newMapEvent);
+                        field.getCircle().setFill(Color.rgb(75,0,130) );
+                        stormFields++;
+                    }
+                }
+                break;
+            }
+            default: break;
+        }
+    }
+
 
     private boolean hasPlayingFiguresOnBoard(Player player)
     {

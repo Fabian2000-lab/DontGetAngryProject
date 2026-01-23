@@ -1,13 +1,13 @@
 package zgkprojekt.model;
 
 import javafx.scene.shape.Circle;
-import zgkprojekt.enums.EffectType;
+import zgkprojekt.enums.EventType;
 import zgkprojekt.enums.FieldType;
 
 public class Field {
     private int id;
     private PlayerFigure player;
-    private EffectType effect;
+    private EventType effect;
     private FieldType fieldType;
     private Circle circle;
     private String extra1;
@@ -34,11 +34,11 @@ public class Field {
         return this.player;
     }
 
-    public void setEffectType(EffectType type) {
+    public void setEffectType(EventType type) {
         this.effect = type;
     }
 
-    public EffectType getEffect() {
+    public EventType getEffect() {
         return this.effect;
     }
 
