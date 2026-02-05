@@ -4,7 +4,6 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
@@ -37,6 +36,7 @@ public class MainService {
     private Button _rollButton;
     private int _currentRollAmount;
     private PlayerFigure lastMovedFigure;
+    private int _countTurns;
 
     private MainService()
     {
@@ -381,6 +381,10 @@ public class MainService {
             _playingField.nextPlayer();
             _rollButton.setDisable(false);
             _currentRollAmount = 0;
+            _countTurns++;
+
+            if(_countTurns % _playingField.getPlayers().size() == 0)
+                newMapEvent();
 
             _playingField.log("--------------------", Color.BLACK);
             _playingField.playerLog(" ---> goes", _playingField.getActivePlayer().getName(), (Color) _playingField.getActivePlayer().getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK);
@@ -470,6 +474,32 @@ public class MainService {
         fieldToDeletePlayer.setPlayer(null);
 
         dest.setPlayer(source);
+    }
+
+    private void switchPlayers(PlayerFigure player1, PlayerFigure player2)
+    {
+        // Get circle center in parent coordinates
+        Integer colIndex1 = GridPane.getColumnIndex(player1.getPosition().getCircle());
+        Integer rowIndex1 = GridPane.getRowIndex(player1.getPosition().getCircle());
+
+        Integer colIndex2 = GridPane.getColumnIndex(player2.getPosition().getCircle());
+        Integer rowIndex2 = GridPane.getRowIndex(player2.getPosition().getCircle());
+
+        GridPane.setColumnIndex(player2.getPolygon(), colIndex1);
+        GridPane.setRowIndex(player2.getPolygon(), rowIndex1);
+
+        GridPane.setColumnIndex(player1.getPolygon(), colIndex2);
+        GridPane.setRowIndex(player1.getPolygon(), rowIndex2);
+
+
+        Field fieldToDeletePlayer1 = player1.getPosition();
+        Field fieldToDeletePlayer2 = player2.getPosition();
+
+        player1.setPosition(fieldToDeletePlayer2);
+        player2.setPosition(fieldToDeletePlayer1);
+
+        fieldToDeletePlayer1.setPlayer(player2);
+        fieldToDeletePlayer2.setPlayer(player1);
     }
 
     public void playerRegistrationAddPlayer(Pane mainPane, int player) {
@@ -653,19 +683,45 @@ public class MainService {
 
     }
 
+    private void removeMapEvent()
+    {
+        switch(_playingField.getCurrentMapEvent().getEventType())
+        {
+            case STORM:
+
+                var track = _playingField.getTrack();
+
+                for(var trackField : track)
+                {
+                    if(trackField.getEffect() != null)
+                    {
+                        trackField.setEffectType(null);
+                        trackField.getCircle().setFill(Color.rgb(147,112,219) );
+                    }
+
+                }
+
+                break;
+
+        }
+
+        _playingField.setCurrentMapEvent(null);
+
+    }
+
     private void newMapEvent() {
 
-        //if(_playingField.getCurrentMapEvent() != null)
-            //removeMapEvent();
+        if(_playingField.getCurrentMapEvent() != null)
+            removeMapEvent();
 
-        EventType newMapEvent = EventType.STORM; //Fürs zeigen kurz statisch stellen EventTypeHelper.getRandomEventType();
+        EventType newMapEvent = EventTypeHelper.getRandomEventType();
         _playingField.setCurrentMapEvent(newMapEvent);
 
         switch (newMapEvent)
         {
             case STORM:
             {
-                _playingField.log("A STORM rises!", Color.BLACK);
+                _playingField.log("Storm Event, -3 if you hit a Stormfield", Color.BLACK);
                 int stormFields = 0;
 
                 while(stormFields < 3)
@@ -681,7 +737,42 @@ public class MainService {
                 }
                 break;
             }
-            default: break;
+            case WORM_HOLE:
+
+                var track = _playingField.getTrack();
+                List<PlayerFigure> playerFiguresOnTrack = new  ArrayList<PlayerFigure>();
+
+                for(var trackField : track)
+                    if(trackField.getPlayer() != null)
+                        playerFiguresOnTrack.add(trackField.getPlayer());
+
+                Collections.shuffle(playerFiguresOnTrack);
+
+                PlayerFigure playerfigure1 = null;
+                PlayerFigure playerfigure2 = null;
+
+                for(var playerFigure : playerFiguresOnTrack)
+                {
+                    if(playerfigure1 == null)
+                        playerfigure1 = playerFigure;
+                    else if(playerfigure2 == null && playerfigure1.getOwner() != playerFigure.getOwner())
+                        playerfigure2 = playerFigure;
+
+                }
+
+                //swap places with each other
+                if(playerfigure1 != null && playerfigure2 != null)
+                {
+                    switchPlayers(playerfigure1, playerfigure2);
+                    _playingField.log(String.format("WormHole:%n%s and %s switched a playingfigure",playerfigure1.getOwner().getName(), playerfigure2.getOwner().getName()), Color.BLACK);
+                } else {
+                    _playingField.log("WormHole Event couldn't trigger", Color.BLACK);
+                }
+
+
+                break;
+            default: _playingField.log("No Event", Color.BLACK);
+                break;
         }
     }
 
@@ -705,6 +796,11 @@ public class MainService {
         _playingField.playerLog(" skipped their turn", _playingField.getActivePlayer().getName(), (Color) _playingField.getActivePlayer().getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK);
         _playingField.nextPlayer();
         _currentRollAmount = 0;
+        _countTurns++;
+
+        if(_countTurns % _playingField.getPlayers().size() == 0)
+            newMapEvent();
+
         _rollButton.setDisable(false);
         _playingField.log("--------------------", Color.BLACK);
         _playingField.playerLog(" ---> goes ", _playingField.getActivePlayer().getName(), (Color) _playingField.getActivePlayer().getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK);
