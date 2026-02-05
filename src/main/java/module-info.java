@@ -12,9 +12,14 @@ module zgkprojekt.dontgetangry {
     requires com.almasb.fxgl.all;
     requires javafx.graphics;
     requires java.desktop;
+    requires java.naming;
+    requires jakarta.persistence;
+    requires org.hibernate.orm.core;
 
     opens zgkprojekt.dontgetangry to javafx.fxml;
     exports zgkprojekt.dontgetangry;
     exports zgkprojekt.controller;
     opens zgkprojekt.controller to javafx.fxml;
+
+    opens zgkprojekt.entity to org.hibernate.orm.core;
 }
