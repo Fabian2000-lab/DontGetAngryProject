@@ -12,7 +12,7 @@ public enum EventType {
     //WILD_DICE,                      // each number rolled produces a different effect (1-3 is a positive effect, 4-6 is a negative effect)
     STORM,                          // figures standing on certain fields gets pushed back 2
     //PEACE,                          // all players are safe from being kicked home
-    //WORM_HOLE,                      // one figure of a player switches places with another figure of another player
+    WORM_HOLE,                      // one figure of a player switches places with another figure of another player
     //USE_LAST_FIGURE,                // player has to use the figure which is the most in the back
     //USE_FIRST_FIGURE                // player has to use the figure which is the most in the front
 }
