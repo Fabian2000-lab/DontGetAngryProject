@@ -20,8 +20,6 @@ public class HelloApplication extends Application {
 
         DbService db = new DbService();
 
-        db.createUser("Fabian", "fabian@schule.com");
-
         Scene scene = new Scene(fxmlLoader.load(), 1000, 600);
         MainService _service = MainService.getInstance();
         _service.setScene(scene);
@@ -30,5 +28,6 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
+
     }
 }
