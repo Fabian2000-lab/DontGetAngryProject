@@ -28,10 +28,10 @@ public class PlayerFigure {
 
     public int distanceTillEnd()
     {
-        var lastField = owner.getStartField().getId() + 39;
+        var lastField = (owner.getStartField().getId() + 39) % 40;
         int currentField = position.getId();
 
-        return  lastField - currentField;
+        return (lastField - currentField + 40) % 40;
     }
 
     public void setMarkAsUnableToMove(boolean markAsUnableToMove)
