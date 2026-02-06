@@ -8,7 +8,7 @@ public enum EventType {
     //REVERSE_MOVEMENT_DIRECTION,     // all figure move in the opposite direction
     //DOUBLE_DICE_VALUE,
     //HALVE_DICE_VALUE,               // values are rounded down - 1 is a 0
-    //TRAPPED_FIGURES,                // 1 figure from each player is trapped(cant move) for that round
+    TRAPPED_FIGURES,                // 1 figure from each player is trapped(cant move) for that round
     //WILD_DICE,                      // each number rolled produces a different effect (1-3 is a positive effect, 4-6 is a negative effect)
     STORM,                          // figures standing on certain fields gets pushed back 2
     //PEACE,                          // all players are safe from being kicked home

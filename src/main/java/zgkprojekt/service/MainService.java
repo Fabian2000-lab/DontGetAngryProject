@@ -709,6 +709,7 @@ public class MainService {
 
                 }
                 break;
+            case TRAPPED_FIGURES:
             case USE_LAST_FIGURE:
             case USE_FIRST_FIGURE:
             {
@@ -806,11 +807,15 @@ public class MainService {
 
                 break;
             }
+            case TRAPPED_FIGURES:
+                if(logging.isEmpty())
+                    logging = "Each Player has 1 randomly locked Figure";
             case USE_FIRST_FIGURE:
                 if(logging.isEmpty())
                     logging = "Use first figure Event";
             case USE_LAST_FIGURE:
             {
+                boolean markFlag = false;
                 if(logging.isEmpty())
                     logging = "Use last figure Event";
 
@@ -834,31 +839,45 @@ public class MainService {
                             currentPlayerFigureList.add(playerFigure);
                     }
 
-                    if(_playingField.getCurrentMapEvent().getEventType() ==  EventType.USE_FIRST_FIGURE)
+                    if(_playingField.getCurrentMapEvent().getEventType() == EventType.USE_FIRST_FIGURE)
                     {
+                        markFlag = true;
                         currentPlayerFigureList = currentPlayerFigureList.stream()
                                 .sorted(Comparator.comparingInt(PlayerFigure::distanceTillEnd))
                                 .toList();
-                    } else if(_playingField.getCurrentMapEvent().getEventType() ==  EventType.USE_LAST_FIGURE)
+                    } else if(_playingField.getCurrentMapEvent().getEventType() == EventType.USE_LAST_FIGURE)
                     {
+                        markFlag = true;
                         currentPlayerFigureList = currentPlayerFigureList.stream()
                                 .sorted(Comparator.comparingInt(PlayerFigure::distanceTillEnd).reversed())
                                 .toList();
-                    }
-
-
-                    for(int j = 1; j < currentPlayerFigureList.size(); j++)
+                    } else if(_playingField.getCurrentMapEvent().getEventType() == EventType.TRAPPED_FIGURES)
                     {
-                        Color currentPolygonPaint = (Color) currentPlayerFigureList.get(j).getPolygon().getFill();
+                        Collections.shuffle(currentPlayerFigureList);
 
-                        currentPlayerFigureList.get(j).setMarkAsUnableToMove(true);
-                        currentPlayerFigureList.get(j).getPolygon().setFill(currentPolygonPaint.darker());
+                        if(!currentPlayerFigureList.isEmpty())
+                        {
+                            Color currentPolygonPaint = (Color) currentPlayerFigureList.getFirst().getPolygon().getFill();
+
+                            currentPlayerFigureList.getFirst().setMarkAsUnableToMove(true);
+                            currentPlayerFigureList.getFirst().getPolygon().setFill(currentPolygonPaint.darker());
+                        }
                     }
+
+                    if(markFlag)
+                    {
+                        for(int j = 1; j < currentPlayerFigureList.size(); j++)
+                        {
+                            Color currentPolygonPaint = (Color) currentPlayerFigureList.get(j).getPolygon().getFill();
+
+                            currentPlayerFigureList.get(j).setMarkAsUnableToMove(true);
+                            currentPlayerFigureList.get(j).getPolygon().setFill(currentPolygonPaint.darker());
+                        }
+                    }
+
                 }
-
-
-
                 break;
+
 
             }
             default: _playingField.log("No Event", Color.BLACK);
