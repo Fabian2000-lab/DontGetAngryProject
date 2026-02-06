@@ -1,6 +1,5 @@
 package zgkprojekt.service;
 
-import eu.hansolo.tilesfx.events.TreeNodeEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
@@ -38,6 +37,7 @@ public class MainService {
     private int _currentRollAmount;
     private PlayerFigure lastMovedFigure;
     private int _countTurns;
+    private int _extraTurn = 0;
 
     private MainService()
     {
@@ -590,17 +590,29 @@ public class MainService {
             _currentRollAmount++;
 
             //Player has no active player on the board, he may roll multiple times
-            if(!hasPlayingFiguresOnBoard(_playingField.getActivePlayer()) && _currentRollAmount <= 3)
+            if(!hasPlayingFiguresOnBoard(_playingField.getActivePlayer()) && _currentRollAmount <= (3 + _extraTurn))
             {
-                _playingField.playerLog(" \uD83C\uDFB2 " + Dice.getCurrentDiceRoll() + " - Roll " + _currentRollAmount + "/3 ", _playingField.getActivePlayer().getName(),  (Color) _playingField.getActivePlayer().getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK );
+                int maxTurns = _extraTurn == 1 ? 4 : 3;
+
+                _playingField.playerLog(" \uD83C\uDFB2 " + Dice.getCurrentDiceRoll() + " - Roll " + _currentRollAmount + "/"+ maxTurns +" ", _playingField.getActivePlayer().getName(),  (Color) _playingField.getActivePlayer().getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK );
 
                 _rollButton.setDisable(false);
 
-                if(_currentRollAmount == 3)
+                if(_currentRollAmount == maxTurns)
                     _rollButton.setDisable(true);
 
-            } else
+            } else if(_extraTurn == 1)
             {
+                int maxTurns = 2;
+
+                _playingField.playerLog(" \uD83C\uDFB2 " + Dice.getCurrentDiceRoll() + " - Roll " + _currentRollAmount + "/"+ maxTurns +" ", _playingField.getActivePlayer().getName(),  (Color) _playingField.getActivePlayer().getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK );
+
+                _rollButton.setDisable(false);
+
+                if(_currentRollAmount == maxTurns)
+                    _rollButton.setDisable(true);
+
+            } else {
                 _playingField.playerLog(" \uD83C\uDFB2 " + Dice.getCurrentDiceRoll(), _playingField.getActivePlayer().getName(),  (Color) _playingField.getActivePlayer().getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK );
             }
 
@@ -695,6 +707,19 @@ public class MainService {
     {
         switch(_playingField.getCurrentMapEvent().getEventType())
         {
+            case EXTRA_DIE:
+            {
+                _extraTurn = 0;
+
+                break;
+            }
+
+            case DOUBLE_DICE_VALUE:
+            case HALVE_DICE_VALUE:
+            {
+                Dice.setMultiplier(1);
+                break;
+            }
             case REVERSE_PLAYING_ORDER:
             {
 
@@ -771,6 +796,28 @@ public class MainService {
         String logging = "";
         switch (newMapEvent)
         {
+
+            case EXTRA_DIE:
+            {
+                _playingField.log("You may roll 1 extra time per turn", Color.BLACK);
+                _extraTurn = 1;
+
+                break;
+            }
+
+            case HALVE_DICE_VALUE:
+            {
+                _playingField.log("The Dice now has half the Value (range 1-3)" , Color.BLACK);
+                Dice.setMultiplier(0.5);
+                break;
+            }
+
+            case DOUBLE_DICE_VALUE:
+            {
+                _playingField.log("The Dice now has double the Value (range 2-12)" , Color.BLACK);
+                Dice.setMultiplier(2.0);
+                break;
+            }
             case REVERSE_PLAYING_ORDER:
             {
                 _playingField.log("For this round the playing order will be reversed", Color.BLACK);
