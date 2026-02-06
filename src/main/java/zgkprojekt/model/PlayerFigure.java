@@ -11,6 +11,7 @@ public class PlayerFigure {
     private boolean hasEffect;
     private Polygon polygon;
     private Player owner;
+    private boolean markAsUnableToMove;
     
     // the effect of the figure for the current round
     private EffectType currentEffect;       
@@ -22,6 +23,25 @@ public class PlayerFigure {
         this.hasEffect = false;
         this.currentEffect = null;
         this.owner = null;
+        this.markAsUnableToMove = false;
+    }
+
+    public int distanceTillEnd()
+    {
+        var lastField = owner.getStartField().getId() + 39;
+        int currentField = position.getId();
+
+        return  lastField - currentField;
+    }
+
+    public void setMarkAsUnableToMove(boolean markAsUnableToMove)
+    {
+        this.markAsUnableToMove = markAsUnableToMove;
+    }
+
+    public boolean getMarkAsUnableToMove()
+    {
+        return this.markAsUnableToMove;
     }
 
     public void setOwner(Player owner) { this.owner = owner; }
