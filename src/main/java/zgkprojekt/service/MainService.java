@@ -1,5 +1,6 @@
 package zgkprojekt.service;
 
+import eu.hansolo.tilesfx.events.TreeNodeEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
@@ -282,13 +283,21 @@ public class MainService {
             return;
         }
 
+
         Polygon polygon = (Polygon) mouseEvent.getSource();
 
         PlayerFigure player = findFigureViaPolygon(polygon);
         Field field = player.getPosition();
 
+
         if(_playingField.getActivePlayer() != player.getOwner())
             return;
+
+        if(player.getMarkAsUnableToMove())
+        {
+            _playingField.log("Figure is locked!", Color.BLACK);
+            return;
+        }
 
         Field newPosition = null;
         boolean validMove = false;
@@ -678,7 +687,6 @@ public class MainService {
 
                 break;
             }
-
         }
 
     }
@@ -700,8 +708,32 @@ public class MainService {
                     }
 
                 }
-
                 break;
+            case USE_LAST_FIGURE:
+            case USE_FIRST_FIGURE:
+            {
+                var allPlayers = _playingField.getPlayers();
+
+                for(int j = 0; j < allPlayers.size(); j++)
+                {
+                    var playerFigures = allPlayers.get(j).getPlayerFigures();
+
+                    for(int i = 0; i < playerFigures.length; i++)
+                    {
+                        playerFigures[i].setMarkAsUnableToMove(false);
+
+                        if(j == 0)
+                            playerFigures[i].getPolygon().setFill(FigureDefinitions.PLAYER1.getFill());
+                        if(j == 1)
+                            playerFigures[i].getPolygon().setFill(FigureDefinitions.PLAYER2.getFill());
+                        if(j == 2)
+                            playerFigures[i].getPolygon().setFill(FigureDefinitions.PLAYER3.getFill());
+                        if(j == 3)
+                            playerFigures[i].getPolygon().setFill(FigureDefinitions.PLAYER4.getFill());
+                    }
+                }
+                break;
+            }
 
         }
 
@@ -717,11 +749,12 @@ public class MainService {
         EventType newMapEvent = EventTypeHelper.getRandomEventType();
         _playingField.setCurrentMapEvent(newMapEvent);
 
+        String logging = "";
         switch (newMapEvent)
         {
             case STORM:
             {
-                _playingField.log("Storm Event, -3 if you hit a Stormfield", Color.BLACK);
+                _playingField.log("Storm Event, -2 if you hit a Stormfield", Color.BLACK);
                 int stormFields = 0;
 
                 while(stormFields < 3)
@@ -738,6 +771,7 @@ public class MainService {
                 break;
             }
             case WORM_HOLE:
+            {
 
                 var track = _playingField.getTrack();
                 List<PlayerFigure> playerFiguresOnTrack = new  ArrayList<PlayerFigure>();
@@ -771,6 +805,62 @@ public class MainService {
 
 
                 break;
+            }
+            case USE_FIRST_FIGURE:
+                if(logging.isEmpty())
+                    logging = "Use first figure Event";
+            case USE_LAST_FIGURE:
+            {
+                if(logging.isEmpty())
+                    logging = "Use last figure Event";
+
+                _playingField.log(logging, Color.BLACK);
+
+                var track = _playingField.getTrack();
+                List<PlayerFigure> playerFiguresOnTrack = new  ArrayList<PlayerFigure>();
+
+                for(var trackField : track)
+                    if(trackField.getPlayer() != null)
+                        playerFiguresOnTrack.add(trackField.getPlayer());
+
+                for(int i = 0; i < _playingField.getPlayers().size(); i++)
+                {
+                    Player currentplayer = _playingField.getPlayers().get(i);
+                    List<PlayerFigure> currentPlayerFigureList = new ArrayList<>();
+
+                    for(var  playerFigure : playerFiguresOnTrack)
+                    {
+                        if(currentplayer == playerFigure.getOwner())
+                            currentPlayerFigureList.add(playerFigure);
+                    }
+
+                    if(_playingField.getCurrentMapEvent().getEventType() ==  EventType.USE_FIRST_FIGURE)
+                    {
+                        currentPlayerFigureList = currentPlayerFigureList.stream()
+                                .sorted(Comparator.comparingInt(PlayerFigure::distanceTillEnd))
+                                .toList();
+                    } else if(_playingField.getCurrentMapEvent().getEventType() ==  EventType.USE_LAST_FIGURE)
+                    {
+                        currentPlayerFigureList = currentPlayerFigureList.stream()
+                                .sorted(Comparator.comparingInt(PlayerFigure::distanceTillEnd).reversed())
+                                .toList();
+                    }
+
+
+                    for(int j = 1; j < currentPlayerFigureList.size(); j++)
+                    {
+                        Color currentPolygonPaint = (Color) currentPlayerFigureList.get(j).getPolygon().getFill();
+
+                        currentPlayerFigureList.get(j).setMarkAsUnableToMove(true);
+                        currentPlayerFigureList.get(j).getPolygon().setFill(currentPolygonPaint.darker());
+                    }
+                }
+
+
+
+                break;
+
+            }
             default: _playingField.log("No Event", Color.BLACK);
                 break;
         }
