@@ -2,7 +2,7 @@ package zgkprojekt.enums;
 
 public enum EventType {
     NOTHING,                        // no event in the cycle
-    //REVERSE_PLAYING_ORDER,          // reverse play order
+    REVERSE_PLAYING_ORDER,          // reverse play order
     //EXTRA_DIE,                      // all players get an extra roll
     //MODIFY_DICE,                    // add a +number or -number to the rolled dice
     //REVERSE_MOVEMENT_DIRECTION,     // all figure move in the opposite direction
