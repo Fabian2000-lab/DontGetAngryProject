@@ -695,6 +695,24 @@ public class MainService {
     {
         switch(_playingField.getCurrentMapEvent().getEventType())
         {
+            case REVERSE_PLAYING_ORDER:
+            {
+
+
+                var playersQueue = _playingField.getActivePlayerQueue();
+                var stack = new Stack<Player>();
+
+                while(!playersQueue.isEmpty())
+                {
+                    stack.add(playersQueue.pop());
+                }
+
+                while(!stack.isEmpty())
+                {
+                    playersQueue.add(stack.pop());
+                }
+                break;
+            }
             case STORM:
 
                 var track = _playingField.getTrack();
@@ -753,6 +771,27 @@ public class MainService {
         String logging = "";
         switch (newMapEvent)
         {
+            case REVERSE_PLAYING_ORDER:
+            {
+                _playingField.log("For this round the playing order will be reversed", Color.BLACK);
+
+                var playersQueue = _playingField.getActivePlayerQueue();
+                var stack = new Stack<Player>();
+
+                while(!playersQueue.isEmpty())
+                {
+                    stack.add(playersQueue.pop());
+                }
+
+                while(!stack.isEmpty())
+                {
+                    playersQueue.add(stack.pop());
+                }
+                int a = 0;
+
+                break;
+
+            }
             case STORM:
             {
                 _playingField.log("Storm Event, -2 if you hit a Stormfield", Color.BLACK);
