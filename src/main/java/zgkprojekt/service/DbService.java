@@ -2,10 +2,12 @@ package zgkprojekt.service;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
 import zgkprojekt.database.HibernateUtil;
 import zgkprojekt.entity.User;
 
 public class DbService {
+
     public void createUser(String name) {
         Transaction tx = null;
 
@@ -17,7 +19,9 @@ public class DbService {
 
             tx.commit();
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            if (tx != null) {
+                tx.rollback();
+            }
             throw e;
         }
     }
@@ -25,7 +29,7 @@ public class DbService {
     public boolean isNameAvailable(String name) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Long count = session.createNativeQuery(
-                            "SELECT count(*) FROM users WHERE name = :name", Long.class)
+                    "SELECT count(*) FROM users WHERE name = :name", Long.class)
                     .setParameter("name", name)
                     .uniqueResult();
 
@@ -68,8 +72,18 @@ public class DbService {
 
             tx.commit();
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            if (tx != null) {
+                tx.rollback();
+            }
             throw e;
+        }
+    }
+
+    public String[] getAllUsers() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createNativeQuery("SELECT name FROM users", String.class)
+                    .list()
+                    .toArray(new String[0]);
         }
     }
 
