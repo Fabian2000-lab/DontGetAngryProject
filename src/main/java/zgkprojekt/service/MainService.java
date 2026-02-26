@@ -16,8 +16,10 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextFlow;
 import kotlin.Pair;
+import zgkprojekt.enums.EffectType;
 import zgkprojekt.enums.EventType;
 import zgkprojekt.enums.FieldType;
+import zgkprojekt.enums.enumHelper.EffectTypeHelper;
 import zgkprojekt.enums.enumHelper.EventTypeHelper;
 import zgkprojekt.model.*;
 import javafx.scene.Scene;
@@ -228,7 +230,13 @@ public class MainService {
             {
                 Polygon tmp = new Polygon();
 
-                tmp.setOnMouseClicked(this::handlePolygonClick);
+                tmp.setOnMouseClicked(event -> {
+                    try {
+                        handlePolygonClick(event); // call your method
+                    } catch (Exception e) {
+                        System.err.println("Error: " + e.getMessage());
+                    }
+                });
 
                 tmp.setFill(definition.getFill());
                 tmp.setScaleX(definition.getScaleX());
@@ -275,7 +283,7 @@ public class MainService {
 
     }
 
-    private void handlePolygonClick(MouseEvent mouseEvent) {
+    private void handlePolygonClick(MouseEvent mouseEvent) throws Exception {
 
         if(_currentRollAmount < 1)
         {
@@ -380,6 +388,7 @@ public class MainService {
             lastMovedFigure = player;
 
             checkForMapEvent();
+            checkForActionField(player.getOwner(), newPosition);
 
             if(checkForWinner())
             {
@@ -404,6 +413,15 @@ public class MainService {
         }
     }
 
+    private void checkForActionField(Player player, Field field) throws Exception {
+
+        if(field.isActionFieldActive())
+        {
+            EffectType type = EffectTypeHelper.getRandomEffectType();
+            player.getInventory().setItem(new Item(type.toString(), type));
+        }
+
+    }
 
 
     private void kickFigure(PlayerFigure second)

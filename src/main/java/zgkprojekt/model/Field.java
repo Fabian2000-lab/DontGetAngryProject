@@ -75,5 +75,10 @@ public class Field {
         return thePolygon;
     }
 
+    public boolean isActionFieldActive()
+    {
+        return this.activeAction;
+    }
+
 
 }
