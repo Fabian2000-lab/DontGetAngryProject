@@ -691,8 +691,6 @@ public class MainService {
                 newActionFields();
             }
         }
-
-
     }
 
     private void checkForMapEvent() {
