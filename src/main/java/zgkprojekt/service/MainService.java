@@ -16,8 +16,10 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextFlow;
 import kotlin.Pair;
+import zgkprojekt.enums.EffectType;
 import zgkprojekt.enums.EventType;
 import zgkprojekt.enums.FieldType;
+import zgkprojekt.enums.enumHelper.EffectTypeHelper;
 import zgkprojekt.enums.enumHelper.EventTypeHelper;
 import zgkprojekt.model.*;
 import javafx.scene.Scene;
@@ -40,28 +42,30 @@ public class MainService {
     private int _countTurns;
     private int _extraTurn = 0;
 
-    private MainService() {
+    private MainService()
+    {
         _playingField = null;
         _scene = null;
     }
 
-    public static MainService getInstance() {
-        if (_instance == null) {
+    public static MainService getInstance()
+    {
+        if(_instance == null)
             _instance = new MainService();
-        }
 
         return _instance;
     }
 
-    public Scene getScene() {
+    public Scene getScene(){
         return _scene;
     }
 
-    public void setScene(Scene scene) {
+    public void setScene(Scene scene){
         _scene = scene;
     }
 
-    public int getPlayerCount() {
+    public int getPlayerCount()
+    {
         return _playingField.getPlayers().size();
     }
 
@@ -223,7 +227,13 @@ public class MainService {
             for (int j = 0; j < 4; j++) {
                 Polygon tmp = new Polygon();
 
-                tmp.setOnMouseClicked(this::handlePolygonClick);
+                tmp.setOnMouseClicked(event -> {
+                    try {
+                        handlePolygonClick(event); // call your method
+                    } catch (Exception e) {
+                        System.err.println("Error: " + e.getMessage());
+                    }
+                });
 
                 tmp.setFill(definition.getFill());
                 tmp.setScaleX(definition.getScaleX());
@@ -271,7 +281,7 @@ public class MainService {
         _playingField.playerLog(" - starts the roll to determine the turn sequence", _playingField.getPlayers().getFirst().getName(), Color.BLACK, Color.BLACK);
     }
 
-    private void handlePolygonClick(MouseEvent mouseEvent) {
+    private void handlePolygonClick(MouseEvent mouseEvent) throws Exception {
 
         if (_currentRollAmount < 1) {
             _playingField.log("Roll first!.", Color.BLACK);
@@ -364,6 +374,7 @@ public class MainService {
             lastMovedFigure = player;
 
             checkForMapEvent();
+            checkForActionField(player.getOwner(), newPosition);
 
             if (checkForWinner()) {
                 //gameEnds();
@@ -375,16 +386,31 @@ public class MainService {
             _currentRollAmount = 0;
             _countTurns++;
 
-            if (_countTurns % _playingField.getPlayers().size() == 0) {
+            if(_countTurns % _playingField.getPlayers().size() == 0)
+            {
                 newMapEvent();
+                newActionFields();
             }
+
 
             _playingField.log("--------------------", Color.BLACK);
             _playingField.playerLog(" ---> goes", _playingField.getActivePlayer().getName(), (Color) _playingField.getActivePlayer().getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK);
         }
     }
 
-    private void kickFigure(PlayerFigure second) {
+    private void checkForActionField(Player player, Field field) throws Exception {
+
+        if(field.isActionFieldActive())
+        {
+            EffectType type = EffectTypeHelper.getRandomEffectType();
+            player.getInventory().setItem(new Item(type.toString(), type));
+        }
+
+    }
+
+
+    private void kickFigure(PlayerFigure second)
+    {
         List<Field> homeFields = second.getOwner().getHome().getHomeFields();
 
         for (int i = 0; i < homeFields.size(); i++) {
@@ -698,9 +724,9 @@ public class MainService {
                 _playingField.log("--------------------", Color.BLACK);
 
                 newMapEvent();
+                newActionFields();
             }
         }
-
     }
 
     private void checkForMapEvent() {
@@ -856,16 +882,20 @@ public class MainService {
             case STORM: {
                 _playingField.log("Storm Event, -2 if you hit a Stormfield", Color.BLACK);
                 int stormFields = 0;
+                ArrayList<Integer> remeberIDs = new ArrayList<Integer>();
 
                 while (stormFields < 3) {
                     Field field = _playingField.getTrack().get((int) (Math.random() * _playingField.getTrack().size()));
 
-                    if (!(field.getId() % 10 == 0 || field.getPlayer() != null)) {
+                    if(!(field.getId() % 10 == 0 || field.getPlayer() != null || remeberIDs.contains(field.getId())))
+                    {
+                        remeberIDs.add(field.getId());
                         field.setEffectType(newMapEvent);
                         field.getCircle().setFill(Color.rgb(75, 0, 130));
                         stormFields++;
                     }
                 }
+                remeberIDs.clear();
                 break;
             }
             case WORM_HOLE: {
@@ -998,17 +1028,81 @@ public class MainService {
         _currentRollAmount = 0;
         _countTurns++;
 
-        if (_countTurns % _playingField.getPlayers().size() == 0) {
+        if(_countTurns % _playingField.getPlayers().size() == 0)
+        {
             newMapEvent();
+            newActionFields();
         }
+
 
         _rollButton.setDisable(false);
         _playingField.log("--------------------", Color.BLACK);
         _playingField.playerLog(" ---> goes ", _playingField.getActivePlayer().getName(), (Color) _playingField.getActivePlayer().getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK);
     }
 
-    public static class FigureDefinitions {
+    private void newActionFields() {
 
+        //Spielfeld holen
+        ArrayList<Field> track = _playingField.getTrack();
+
+        //alte Ereignisfelder entfernen
+        for(Field field: track)
+        {
+            Polygon star = field.disableAction();
+
+            if(star != null)
+                ((GridPane) _scene.getRoot()).getChildren().remove(star);
+        }
+
+        //2 Felder raussuchen die sich für ein Ereignisfeld eignen
+        int actionFields = 0;
+        ArrayList<Integer> remeberIDs = new ArrayList<Integer>();
+
+        while(actionFields < 2)
+        {
+            Field field = _playingField.getTrack().get((int) (Math.random() * _playingField.getTrack().size()));
+
+            if(!(field.getEffect() != null || field.getId() % 10 == 0 || field.getPlayer() != null || remeberIDs.contains(field.getId())))
+            {
+                Polygon star = createStar(5, 15, 8);
+                star.setFill(Color.GOLD);
+                star.setTranslateX(26);
+
+                //logik aus moveTo()
+                Integer colIndex = GridPane.getColumnIndex(field.getCircle());
+                Integer rowIndex = GridPane.getRowIndex(field.getCircle());
+
+                GridPane.setColumnIndex(star, colIndex);
+                GridPane.setRowIndex(star, rowIndex);
+
+                ((GridPane) _scene.getRoot()).getChildren().add(star);
+
+                field.enableAction(star);
+                remeberIDs.add(field.getId());
+                actionFields++;
+            }
+        }
+        remeberIDs.clear();
+
+        //Auf den Spielfeldern ein Stern anzeigen lassen
+
+    }
+
+    //Methode habe ich generieren lassen
+    private Polygon createStar(int points, double outerRadius, double innerRadius) {
+        Polygon star = new Polygon();
+        double angle = Math.PI / points;
+
+        for (int i = 0; i < 2 * points; i++) {
+           double r = (i % 2 == 0) ? outerRadius : innerRadius;
+           double x = Math.cos(i * angle) * r;
+           double y = Math.sin(i * angle) * r;
+           star.getPoints().addAll(x, y);
+        }
+        return star;
+    }
+
+    public static class FigureDefinitions{
         public static final Polygon PLAYER1;
         public static final Polygon PLAYER2;
         public static final Polygon PLAYER3;
@@ -1025,7 +1119,7 @@ public class MainService {
             PLAYER1.setStrokeWidth(3.0);
 
             PLAYER2 = new Polygon();
-            PLAYER2.setFill(Color.rgb(255, 255, 102));
+            PLAYER2.setFill(Color.rgb(255,255,102));
             PLAYER2.getPoints().addAll(100.0, 50.0, 135.35, 64.64, 150.0, 100.0, 135.35, 135.35, 100.0, 150.0, 64.64, 135.35, 50.0, 100.0, 64.64, 64.64);
             PLAYER2.setScaleX(0.4);
             PLAYER2.setScaleY(0.4);

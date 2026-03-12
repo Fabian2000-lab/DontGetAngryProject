@@ -17,17 +17,17 @@
             <Font name="Constantia" size="20.0" />
          </font>
       </TextField>
-      <Button layoutX="150.0" layoutY="250.0" mnemonicParsing="false" onAction="#handleAddPlayer" prefHeight="75.0" prefWidth="400.0" text="+ Add Player">
+      <Button layoutX="150.0" layoutY="250.0" mnemonicParsing="false" onAction="#handleAddPlayer" prefHeight="75.0" prefWidth="400.0" style="-fx-background-radius: 20;" text="+ Add Player">
          <font>
             <Font name="Constantia" size="38.0" />
          </font>
       </Button>
-      <Button layoutX="750.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleStartGameButton" prefHeight="75.0" prefWidth="400.0" text="Start Game">
+      <Button layoutX="750.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleStartGameButton" prefHeight="75.0" prefWidth="400.0" style="-fx-background-radius: 20;" text="Start Game">
          <font>
             <Font name="Constantia" size="38.0" />
          </font>
       </Button>
-      <Button layoutX="150.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleRemovePlayer" prefHeight="75.0" prefWidth="400.0" text="- Remove Player">
+      <Button layoutX="150.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleRemovePlayer" prefHeight="75.0" prefWidth="400.0" style="-fx-background-radius: 20;" text="- Remove Player">
          <font>
             <Font name="Constantia" size="38.0" />
          </font>
