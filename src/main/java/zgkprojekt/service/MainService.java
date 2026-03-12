@@ -101,7 +101,7 @@ public class MainService {
                 }
             }
 
-            if (counter == 4) {
+            if (counter >= 1) {
                 _playingField.playerLog("HAS WON!", player.getName(), (Color) player.getHome().getHomeFields().getFirst().getCircle().getFill(), Color.BLACK);
                 dbService.updatePoints(player.getName(), 100.0);
                 return true;
