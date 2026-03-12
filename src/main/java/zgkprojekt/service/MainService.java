@@ -601,7 +601,9 @@ public class MainService {
             return false;
         }
 
-        // check DB for existing users and create missing ones
+        // check DB for existing users
+        // if one name is taken it will display a red border and not allow the game to start
+        // the rest of the names which are not taken are bordered green
         boolean anyTaken = false;
 
         for (int i = 0; i < playerCount; i++) {
@@ -623,9 +625,8 @@ public class MainService {
                 tf.setPromptText("Name already taken in the database");
                 anyTaken = true;
             } else {
-                // create user
+                // show text field as green
                 try {
-                    dbService.createUser(name);
                     tf.setStyle("-fx-border-color: green; -fx-border-width: 2px;");
                 } catch (Exception ex) {
                     tf.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
@@ -636,6 +637,15 @@ public class MainService {
 
         if (anyTaken) {
             return false;
+        }
+
+        for (int i = 0; i < playerCount; i++) {
+            String name = playerNamestmp[i];
+            try {
+                dbService.createUser(name);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
 
         playerNames = playerNamestmp;
