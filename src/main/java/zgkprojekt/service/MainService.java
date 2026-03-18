@@ -1076,7 +1076,6 @@ public class MainService {
             {
                 Polygon star = createStar(5, 15, 8);
                 star.setFill(Color.GOLD);
-                star.setTranslateX(26);
 
                 //logik aus moveTo()
                 Integer colIndex = GridPane.getColumnIndex(field.getCircle());
@@ -1084,6 +1083,10 @@ public class MainService {
 
                 GridPane.setColumnIndex(star, colIndex);
                 GridPane.setRowIndex(star, rowIndex);
+
+                // Stern in der Zelle zentrieren
+                GridPane.setHalignment(star, HPos.CENTER);
+                GridPane.setValignment(star, VPos.CENTER);
 
                 ((GridPane) _scene.getRoot()).getChildren().add(star);
 
